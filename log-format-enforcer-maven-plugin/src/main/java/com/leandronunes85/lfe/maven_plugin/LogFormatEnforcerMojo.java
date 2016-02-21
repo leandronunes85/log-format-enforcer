@@ -9,6 +9,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +41,9 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     }
 
     private final LogFormatEnforcerCreator lfeCreator = new LogFormatEnforcerCreator();
+
+    @Parameter(defaultValue = "${project}")
+    private MavenProject project;
 
     @Parameter
     private Map<String, String> mandatoryFields = new HashMap<>();
@@ -74,10 +78,11 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
                 entrySeparator, valueDelimiter, keyValueSeparator);
         try {
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
+            project.addCompileSourceRoot(outputDirectory.getPath());
+            getLog().info("File successfully written");
         } catch (IOException e) {
             throw new MojoExecutionException("Error writing LogFormatEnforcer.java", e);
         }
-        getLog().info("File successfully written");
     }
 
     private Path findWhereToWrite() {
