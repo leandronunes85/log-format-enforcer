@@ -1,0 +1,120 @@
+logFormatEnforcer(package,
+                    mandatoryFieldInfos,
+                    optionalFields,
+                    entrySeparator,
+                    valueDelimiter,
+                    keyValueSeparator,
+                    builderEntryPoint) ::= <<
+package <package>;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
+import java.util.function.BooleanSupplier;
+
+import static java.util.stream.Collectors.joining;
+
+public class LogFormatEnforcer {
+
+    public static LogFormatEnforcer loggerFor(Class\<?\> clazz) {
+        return new LogFormatEnforcer(clazz.getName());
+    }
+
+    private final HashMap\<Level, BooleanSupplier\> logEnabledLookup = new HashMap\<\>(Level.values().length);
+    private final HashMap\<Level, BiConsumer\<String, Object[]\>\> logLookup = new HashMap\<\>(Level.values().length);
+
+    private LogFormatEnforcer(String logName) {
+        Logger logger = LoggerFactory.getLogger(logName);
+
+        this.logEnabledLookup.put(Level.ERROR, logger::isErrorEnabled);
+        this.logEnabledLookup.put(Level.WARN, logger::isWarnEnabled);
+        this.logEnabledLookup.put(Level.INFO, logger::isInfoEnabled);
+        this.logEnabledLookup.put(Level.DEBUG, logger::isDebugEnabled);
+        this.logEnabledLookup.put(Level.TRACE, logger::isTraceEnabled);
+
+        this.logLookup.put(Level.ERROR, logger::error);
+        this.logLookup.put(Level.WARN, logger::warn);
+        this.logLookup.put(Level.INFO, logger::info);
+        this.logLookup.put(Level.DEBUG, logger::debug);
+        this.logLookup.put(Level.TRACE, logger::trace);
+    }
+
+    public void log(Level level, ToBuild willBuild) {
+
+        if (this.logEnabledLookup.get(level).getAsBoolean()) {
+            ActualBuilder builder = new ActualBuilder();
+            willBuild.buildIt(builder);
+            this.logLookup.get(level).accept(builder.getMessage(), builder.getArguments());
+        }
+
+    }
+
+    public interface ToBuild {
+        OptionalFields buildIt(<builderEntryPoint> builder);
+    }
+
+    <mandatoryFieldInfos:interface(); separator="\n\n">
+
+    public interface OptionalFields {
+        <optionalFields:optionalFieldMethod(); separator="\n">
+        OptionalFields other(String name, Object value);
+    }
+
+    private class ActualBuilder implements <mandatoryFieldInfos:interfaceName(); separator=", ">, OptionalFields {
+
+        private final ArrayList\<String\> messages = new ArrayList\<\>();
+        private final ArrayList\<Object\> values = new ArrayList\<\>();
+
+        <mandatoryFieldInfos:actualBuilderMandatoryMethod();separator="\n\n">
+
+        <optionalFields:actualBuilderOptionalMethod();separator="\n\n">
+
+        public OptionalFields other(String name, Object value) {
+            return newField(name, value);
+        }
+
+        private ActualBuilder newField(String name, Object value) {
+            this.messages.add(name + "<keyValueSeparator><valueDelimiter>{}<valueDelimiter>");
+            this.values.add(value);
+            return this;
+        }
+
+        public String getMessage() {
+            return messages.stream().collect(joining("<entrySeparator>"));
+        }
+
+        public Object[] getArguments() {
+            return values.toArray();
+        }
+    }
+}
+
+>>
+
+interface(mandatoryFieldInfo) ::= <<
+public interface <mandatoryFieldInfo.interfaceName> {
+    <mandatoryFieldInfo.returnType> <mandatoryFieldInfo.fieldName>(Object <mandatoryFieldInfo.fieldName>);
+}
+>>
+
+optionalFieldMethod(fieldInfo) ::= <<OptionalFields <fieldInfo.fieldName>(Object <fieldInfo.fieldName>);>>
+
+interfaceName(mandatoryFieldInfo) ::= <<
+<mandatoryFieldInfo.interfaceName>
+>>
+
+actualBuilderMandatoryMethod(mandatoryFieldInfo) ::= <<
+public <mandatoryFieldInfo.returnType> <mandatoryFieldInfo.fieldName>(Object <mandatoryFieldInfo.fieldName>) {
+    return newField("<mandatoryFieldInfo.fieldText>", <mandatoryFieldInfo.fieldName>);
+}
+>>
+
+actualBuilderOptionalMethod(fieldInfo) ::= <<
+public OptionalFields <fieldInfo.fieldName>(Object <fieldInfo.fieldName>) {
+    return newField("<fieldInfo.fieldText>", <fieldInfo.fieldName>);
+}
+>>
