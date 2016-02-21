@@ -23,7 +23,8 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
             FieldInfo.of("optionalField3", "optionalField3Text")
     );
     private static final String EXPECTED_ENTRY_SEPARATOR = "entry_separator";
-    private static final String EXPECTED_VALUE_DELIMITER = "value_delimeter";
+    private static final String EXPECTED_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
+    private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String EXPECTED_KEY_VALUE_SEPARATOR = "key_value_separator";
 
     private String result;
@@ -36,7 +37,8 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
                 EXPECTED_MANDATORY_FIELDS,
                 EXPECTED_OPTIONAL_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
-                EXPECTED_VALUE_DELIMITER,
+                EXPECTED_VALUE_DELIMITER_PREFIX,
+                EXPECTED_VALUE_DELIMITER_SUFFIX,
                 EXPECTED_KEY_VALUE_SEPARATOR
         );
     }
@@ -109,7 +111,8 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
 
     @Test
     public void createsActualBuilderUsesConfiguredValueDelimiter() {
-        assertThat(result).contains(format("%s%s{}%s", EXPECTED_KEY_VALUE_SEPARATOR, EXPECTED_VALUE_DELIMITER, EXPECTED_VALUE_DELIMITER));
+        assertThat(result).contains(format("%s%s{}%s\"",
+                EXPECTED_KEY_VALUE_SEPARATOR, EXPECTED_VALUE_DELIMITER_PREFIX, EXPECTED_VALUE_DELIMITER_SUFFIX));
     }
 
     @Test

@@ -2,7 +2,8 @@ logFormatEnforcer(package,
                     mandatoryFieldInfos,
                     optionalFields,
                     entrySeparator,
-                    valueDelimiter,
+                    valueDelimiterPrefix,
+                    valueDelimiterSuffix,
                     keyValueSeparator,
                     builderEntryPoint) ::= <<
 package <package>;
@@ -78,7 +79,7 @@ public class LogFormatEnforcer {
         }
 
         private ActualBuilder newField(String name, Object value) {
-            this.messages.add(name + "<keyValueSeparator><valueDelimiter>{}<valueDelimiter>");
+            this.messages.add(name + "<keyValueSeparator><valueDelimiterPrefix>{}<valueDelimiterSuffix>");
             this.values.add(value);
             return this;
         }

@@ -23,7 +23,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
             FieldInfo.of("optionalField3", "optionalField3Text")
     );
     private static final String GOOD_ENTRY_SEPARATOR = "entry_separator";
-    private static final String GOOD_VALUE_DELIMITER = "value_delimeter";
+    private static final String GOOD_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
+    private static final String GOOD_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String GOOD_KEY_VALUE_SEPARATOR = "key_value_separator";
 
     private LogFormatEnforcerCreator victim;
@@ -40,7 +41,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -52,7 +54,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -64,7 +67,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -76,7 +80,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -88,7 +93,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 null,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -100,7 +106,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 null,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
@@ -112,18 +119,33 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 null,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 GOOD_KEY_VALUE_SEPARATOR
         );
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksValueDelimiterIsNotNull() {
+    public void checksValueDelimiterPrefixIsNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
+                null,
+                GOOD_VALUE_DELIMITER_SUFFIX,
+                GOOD_KEY_VALUE_SEPARATOR
+        );
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void checksValueDelimiterSuffixIsNotNull() {
+        victim.createALogFormatEnforcer(
+                GOOD_PACKAGE_NAME,
+                GOOD_MANDATORY_FIELDS,
+                GOOD_OPTIONAL_FIELDS,
+                GOOD_ENTRY_SEPARATOR,
+                GOOD_VALUE_DELIMITER_PREFIX,
                 null,
                 GOOD_KEY_VALUE_SEPARATOR
         );
@@ -136,7 +158,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
                 GOOD_MANDATORY_FIELDS,
                 GOOD_OPTIONAL_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER,
+                GOOD_VALUE_DELIMITER_PREFIX,
+                GOOD_VALUE_DELIMITER_SUFFIX,
                 null
         );
     }

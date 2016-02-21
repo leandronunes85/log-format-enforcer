@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
+        <groupId>com.leandronunes85.lfe</groupId>
         <artifactId>log-format-enforcer</artifactId>
-        <groupId>com.leandronunes85</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

@@ -58,7 +58,10 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     private String entrySeparator;
 
     @Parameter(defaultValue = "'")
-    private String valueDelimiter;
+    private String valueDelimiterPrefix;
+
+    @Parameter(defaultValue = "'")
+    private String valueDelimiterSuffix;
 
     @Parameter(defaultValue = "=")
     private String keyValueSeparator;
@@ -75,7 +78,7 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
         pathToWrite.getParent().toFile().mkdirs();
         String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(packageName,
                 toFieldInfoList(mandatoryFields), toFieldInfoList(optionalFields),
-                entrySeparator, valueDelimiter, keyValueSeparator);
+                entrySeparator, valueDelimiterPrefix, valueDelimiterSuffix, keyValueSeparator);
         try {
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
             project.addCompileSourceRoot(outputDirectory.getPath());
@@ -104,7 +107,8 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
         }
         log.debug(format("packageName -> \"%s\"", packageName));
         log.debug(format("entrySeparator -> \"%s\"", entrySeparator));
-        log.debug(format("valueDelimiter -> \"%s\"", valueDelimiter));
+        log.debug(format("valueDelimiterPrefix -> \"%s\"", valueDelimiterPrefix));
+        log.debug(format("valueDelimiterSuffix -> \"%s\"", valueDelimiterSuffix));
         log.debug(format("keyValueSeparator -> \"%s\"", keyValueSeparator));
         log.debug(format("outputDirectory -> \"%s\"", outputDirectory));
     }

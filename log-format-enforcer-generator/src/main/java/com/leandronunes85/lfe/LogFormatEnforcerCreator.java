@@ -28,11 +28,12 @@ public class LogFormatEnforcerCreator {
                                            List<FieldInfo> withMandatoryFields,
                                            List<FieldInfo> withOptionalFields,
                                            String withEntrySeparator,
-                                           String withValueDelimiter,
+                                           String withValueDelimiterPrefix,
+                                           String withValueDelimiterSuffix,
                                            String withKeyValueSeparator) {
 
         checkArguments(withPackageName, withMandatoryFields, withOptionalFields,
-                withEntrySeparator, withValueDelimiter, withKeyValueSeparator);
+                withEntrySeparator, withValueDelimiterPrefix, withValueDelimiterSuffix, withKeyValueSeparator);
 
         List<MandatoryFieldInfo> mandatoryFieldInfos = getMandatoryFieldInfos(withMandatoryFields);
 
@@ -44,7 +45,8 @@ public class LogFormatEnforcerCreator {
                 .add("mandatoryFieldInfos", mandatoryFieldInfos)
                 .add("optionalFields", withOptionalFields)
                 .add("entrySeparator", withEntrySeparator)
-                .add("valueDelimiter", withValueDelimiter)
+                .add("valueDelimiterPrefix", withValueDelimiterPrefix)
+                .add("valueDelimiterSuffix", withValueDelimiterSuffix)
                 .add("keyValueSeparator", withKeyValueSeparator)
                 .add("builderEntryPoint", builderEntryPoint)
                 .render();
@@ -54,7 +56,8 @@ public class LogFormatEnforcerCreator {
                                 List<FieldInfo> withMandatoryFields,
                                 List<FieldInfo> withOptionalFields,
                                 String withEntrySeparator,
-                                String withValueDelimiter,
+                                String withValueDelimiterPrefix,
+                                String withValueDelimiterSuffix,
                                 String withKeyValueSeparator) {
 
         checkPackageName(withPackageName);
@@ -65,7 +68,9 @@ public class LogFormatEnforcerCreator {
 
         checkArgument(withEntrySeparator != null, "entrySeparator must not be null");
 
-        checkArgument(withValueDelimiter != null, "valueDelimiter must not be null");
+        checkArgument(withValueDelimiterPrefix != null, "valueDelimiterPrefix must not be null");
+
+        checkArgument(withValueDelimiterSuffix != null, "valueDelimiterSuffix must not be null");
 
         checkArgument(withKeyValueSeparator != null, "keyValueSeparator must not be null");
 
