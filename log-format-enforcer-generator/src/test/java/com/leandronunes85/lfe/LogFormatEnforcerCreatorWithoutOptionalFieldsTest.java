@@ -11,12 +11,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest {
 
     private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
-    private static final List<FieldInfo> EXPECTED_MANDATORY_FIELDS = asList(
-            FieldInfo.of("mandatoryField1", "mandatoryField1Text"),
-            FieldInfo.of("mandatoryField2", "mandatoryField2Text"),
-            FieldInfo.of("mandatoryField3", "mandatoryField3Text")
+    private static final List<FieldInfo> EXPECTED_FIELDS = asList(
+            FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
+            FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
+            FieldInfo.mandatory("mandatoryField3", "mandatoryField3Text")
     );
-    private static final List<FieldInfo> EXPECTED_OPTIONAL_FIELDS = asList();
     private static final String EXPECTED_ENTRY_SEPARATOR = "entry_separator";
     private static final String EXPECTED_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
     private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
@@ -29,8 +28,7 @@ public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest {
         LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
         this.result = victim.createALogFormatEnforcer(
                 EXPECTED_PACKAGE_NAME,
-                EXPECTED_MANDATORY_FIELDS,
-                EXPECTED_OPTIONAL_FIELDS,
+                EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
                 EXPECTED_VALUE_DELIMITER_PREFIX,
                 EXPECTED_VALUE_DELIMITER_SUFFIX,

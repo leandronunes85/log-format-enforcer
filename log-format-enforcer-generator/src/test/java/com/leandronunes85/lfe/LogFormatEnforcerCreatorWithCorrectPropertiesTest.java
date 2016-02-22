@@ -12,15 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
 
     private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
-    private static final List<FieldInfo> EXPECTED_MANDATORY_FIELDS = asList(
-            FieldInfo.of("mandatoryField1", "mandatoryField1Text"),
-            FieldInfo.of("mandatoryField2", "mandatoryField2Text"),
-            FieldInfo.of("mandatoryField3", "mandatoryField3Text")
-    );
-    private static final List<FieldInfo> EXPECTED_OPTIONAL_FIELDS = asList(
-            FieldInfo.of("optionalField1", "optionalField1Text"),
-            FieldInfo.of("optionalField2", "optionalField2Text"),
-            FieldInfo.of("optionalField3", "optionalField3Text")
+    private static final List<FieldInfo> EXPECTED_FIELDS = asList(
+            FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
+            FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
+            FieldInfo.mandatory("mandatoryField3", "mandatoryField3Text"),
+
+            FieldInfo.optional("optionalField1", "optionalField1Text"),
+            FieldInfo.optional("optionalField2", "optionalField2Text"),
+            FieldInfo.optional("optionalField3", "optionalField3Text")
     );
     private static final String EXPECTED_ENTRY_SEPARATOR = "entry_separator";
     private static final String EXPECTED_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
@@ -34,8 +33,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
         LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
         this.result = victim.createALogFormatEnforcer(
                 EXPECTED_PACKAGE_NAME,
-                EXPECTED_MANDATORY_FIELDS,
-                EXPECTED_OPTIONAL_FIELDS,
+                EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
                 EXPECTED_VALUE_DELIMITER_PREFIX,
                 EXPECTED_VALUE_DELIMITER_SUFFIX,
@@ -63,44 +61,59 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
     @Test
     public void createsClassWithInterfaceForLastMandatoryField() {
         assertThat(result).contains("interface MandatoryField3 ");
-        assertThat(result).contains("OptionalFields mandatoryField3(Object mandatoryField3)");
+        assertThat(result).contains("OptionalField1 mandatoryField3(Object mandatoryField3)");
     }
 
     @Test
-    public void createsClassWithOptionalFieldsInterface() {
-        assertThat(result).contains("interface OptionalFields ");
+    public void createsClassWithInterfaceForFirstOptionalField() {
+        assertThat(result).contains("interface OptionalField1 extends OptionalField2 ");
+        assertThat(result).contains("OptionalField2 optionalField1(Object optionalField1)");
+    }
 
-        assertThat(result).contains("OptionalFields optionalField1(Object optionalField1);");
-        assertThat(result).contains("OptionalFields optionalField2(Object optionalField2);");
-        assertThat(result).contains("OptionalFields optionalField3(Object optionalField3);");
+    @Test
+    public void createsClassWithInterfaceForSecondOptionalField() {
+        assertThat(result).contains("interface OptionalField2 extends OptionalField3 ");
+        assertThat(result).contains("OptionalField3 optionalField2(Object optionalField2)");
+    }
+
+    @Test
+    public void createsClassWithInterfaceForLastOptionalField() {
+        assertThat(result).contains("interface OptionalField3 extends OtherFields ");
+        assertThat(result).contains("OtherFields optionalField3(Object optionalField3)");
+    }
+
+    @Test
+    public void createsClassWithOtherFieldsInterface() {
+        assertThat(result).contains("public interface OtherFields {\n" +
+                "        OtherFields other(String name, Object value);\n" +
+                "    }");
     }
 
     @Test
     public void createsActualBuilderClassThatImplementsAllInterfaces() {
-        assertThat(result).contains("private class ActualBuilder implements MandatoryField1, MandatoryField2, MandatoryField3, OptionalFields");
+        assertThat(result).contains("private class ActualBuilder " +
+                "implements MandatoryField1, MandatoryField2, MandatoryField3, " +
+                "OptionalField1, OptionalField2, OptionalField3, OtherFields");
     }
 
     @Test
-    public void createsActualBuilderClassThatContainsSetterForAllMandatoryFields() {
+    public void createsActualBuilderClassThatContainsSetterForAllFields() {
         assertThat(result).contains("public MandatoryField2 mandatoryField1(Object mandatoryField1)");
         assertThat(result).contains("return newField(\"mandatoryField1Text\", mandatoryField1);");
 
         assertThat(result).contains("public MandatoryField3 mandatoryField2(Object mandatoryField2)");
         assertThat(result).contains("return newField(\"mandatoryField2Text\", mandatoryField2);");
 
-        assertThat(result).contains("public OptionalFields mandatoryField3(Object mandatoryField3)");
+        assertThat(result).contains("public OptionalField1 mandatoryField3(Object mandatoryField3)");
         assertThat(result).contains("return newField(\"mandatoryField3Text\", mandatoryField3);");
-    }
 
-    @Test
-    public void createsActualBuilderClassThatContainsSetterForAllOptionalFields() {
-        assertThat(result).contains("public OptionalFields optionalField1(Object optionalField1)");
+        assertThat(result).contains("public OptionalField2 optionalField1(Object optionalField1)");
         assertThat(result).contains("return newField(\"optionalField1Text\", optionalField1);");
 
-        assertThat(result).contains("public OptionalFields optionalField2(Object optionalField2)");
+        assertThat(result).contains("public OptionalField3 optionalField2(Object optionalField2)");
         assertThat(result).contains("return newField(\"optionalField2Text\", optionalField2);");
 
-        assertThat(result).contains("public OptionalFields optionalField3(Object optionalField3)");
+        assertThat(result).contains("public OtherFields optionalField3(Object optionalField3)");
         assertThat(result).contains("return newField(\"optionalField3Text\", optionalField3);");
     }
 
@@ -116,7 +129,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
     }
 
     @Test
-    public void createsActualBuilderCreatesToBuildInterfaceWithCorrectEntryPoint() {
-        assertThat(result).contains("OptionalFields buildIt(MandatoryField1 builder);");
+    public void toBuildInterfaceContainsCorrectEntryPoint() {
+        assertThat(result).contains("OtherFields buildIt(MandatoryField1 builder);");
     }
 }

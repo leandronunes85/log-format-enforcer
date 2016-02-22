@@ -23,22 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 @Mojo(name = "create", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class LogFormatEnforcerMojo extends AbstractMojo {
 
     private static final String FILE_NAME = "LogFormatEnforcer.java";
-
-    private static List<FieldInfo> toFieldInfoList(Map<String, String> input) {
-        return input.entrySet().stream()
-                .map(e -> FieldInfo.of(e.getKey(), firstNonNull(e.getValue(), e.getKey())))
-                .collect(toList());
-    }
 
     private final LogFormatEnforcerCreator lfeCreator = new LogFormatEnforcerCreator();
 
@@ -76,8 +72,7 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
         getLog().info("Writing " + pathToWrite.toString());
 
         pathToWrite.getParent().toFile().mkdirs();
-        String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(packageName,
-                toFieldInfoList(mandatoryFields), toFieldInfoList(optionalFields),
+        String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(packageName, getFieldInfoList(),
                 entrySeparator, valueDelimiterPrefix, valueDelimiterSuffix, keyValueSeparator);
         try {
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
@@ -86,6 +81,15 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
         } catch (IOException e) {
             throw new MojoExecutionException("Error writing LogFormatEnforcer.java", e);
         }
+    }
+
+    private List<FieldInfo> getFieldInfoList() {
+        Stream<FieldInfo> mandatory = mandatoryFields.entrySet().stream()
+                .map(e -> FieldInfo.mandatory(e.getKey(), firstNonNull(e.getValue(), e.getKey())));
+        Stream<FieldInfo> optional = optionalFields.entrySet().stream()
+                .map(e -> FieldInfo.optional(e.getKey(), firstNonNull(e.getValue(), e.getKey())));
+
+        return concat(mandatory, optional).collect(toList());
     }
 
     private Path findWhereToWrite() {

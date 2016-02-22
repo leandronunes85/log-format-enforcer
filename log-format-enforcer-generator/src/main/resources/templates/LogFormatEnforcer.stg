@@ -1,11 +1,11 @@
 logFormatEnforcer(package,
-                    mandatoryFieldInfos,
-                    optionalFields,
+                    expandedFieldInfos,
                     entrySeparator,
                     valueDelimiterPrefix,
                     valueDelimiterSuffix,
                     keyValueSeparator,
-                    builderEntryPoint) ::= <<
+                    builderEntryPoint,
+                    lastInterfaceName) ::= <<
 package <package>;
 
 import org.slf4j.Logger;
@@ -55,26 +55,23 @@ public class LogFormatEnforcer {
     }
 
     public interface ToBuild {
-        OptionalFields buildIt(<builderEntryPoint> builder);
+        <lastInterfaceName> buildIt(<builderEntryPoint> builder);
     }
 
-    <mandatoryFieldInfos:interface(); separator="\n\n">
+    <expandedFieldInfos:interface(); separator="\n\n">
 
-    public interface OptionalFields {
-        <optionalFields:optionalFieldMethod(); separator="\n">
-        OptionalFields other(String name, Object value);
+    public interface <lastInterfaceName> {
+        <lastInterfaceName> other(String name, Object value);
     }
 
-    private class ActualBuilder implements <mandatoryFieldInfos:interfaceName(); separator=", ">, OptionalFields {
+    private class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif><lastInterfaceName> {
 
         private final ArrayList\<String\> messages = new ArrayList\<\>();
         private final ArrayList\<Object\> values = new ArrayList\<\>();
 
-        <mandatoryFieldInfos:actualBuilderMandatoryMethod();separator="\n\n">
+        <expandedFieldInfos:actualBuilderMethod();separator="\n\n">
 
-        <optionalFields:actualBuilderOptionalMethod();separator="\n\n">
-
-        public OptionalFields other(String name, Object value) {
+        public <lastInterfaceName> other(String name, Object value) {
             return newField(name, value);
         }
 
@@ -96,26 +93,14 @@ public class LogFormatEnforcer {
 
 >>
 
-interface(mandatoryFieldInfo) ::= <<
-public interface <mandatoryFieldInfo.interfaceName> {
-    <mandatoryFieldInfo.returnType> <mandatoryFieldInfo.fieldName>(Object <mandatoryFieldInfo.fieldName>);
+interface(expandedFieldInfo) ::= <<
+public interface <expandedFieldInfo.interfaceName> <if(expandedFieldInfo.optional)>extends <expandedFieldInfo.returnType> <endif>{
+    <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Object <expandedFieldInfo.fieldName>);
 }
 >>
 
-optionalFieldMethod(fieldInfo) ::= <<OptionalFields <fieldInfo.fieldName>(Object <fieldInfo.fieldName>);>>
-
-interfaceName(mandatoryFieldInfo) ::= <<
-<mandatoryFieldInfo.interfaceName>
->>
-
-actualBuilderMandatoryMethod(mandatoryFieldInfo) ::= <<
-public <mandatoryFieldInfo.returnType> <mandatoryFieldInfo.fieldName>(Object <mandatoryFieldInfo.fieldName>) {
-    return newField("<mandatoryFieldInfo.fieldText>", <mandatoryFieldInfo.fieldName>);
-}
->>
-
-actualBuilderOptionalMethod(fieldInfo) ::= <<
-public OptionalFields <fieldInfo.fieldName>(Object <fieldInfo.fieldName>) {
-    return newField("<fieldInfo.fieldText>", <fieldInfo.fieldName>);
+actualBuilderMethod(expandedFieldInfo) ::= <<
+public <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Object <expandedFieldInfo.fieldName>) {
+    return newField("<expandedFieldInfo.fieldText>", <expandedFieldInfo.fieldName>);
 }
 >>

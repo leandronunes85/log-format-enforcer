@@ -12,15 +12,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
 
     private static final String GOOD_PACKAGE_NAME = "expected.package.name";
-    private static final List<FieldInfo> GOOD_MANDATORY_FIELDS = asList(
-            FieldInfo.of("mandatoryField1", "mandatoryField1Text"),
-            FieldInfo.of("mandatoryField2", "mandatoryField2Text"),
-            FieldInfo.of("mandatoryField3", "mandatoryField3Text")
-    );
-    private static final List<FieldInfo> GOOD_OPTIONAL_FIELDS = asList(
-            FieldInfo.of("optionalField1", "optionalField1Text"),
-            FieldInfo.of("optionalField2", "optionalField2Text"),
-            FieldInfo.of("optionalField3", "optionalField3Text")
+    private static final List<FieldInfo> GOOD_FIELDS = asList(
+            FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
+            FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
+            FieldInfo.mandatory("mandatoryField3", "mandatoryField3Text"),
+
+            FieldInfo.optional("optionalField1", "optionalField1Text"),
+            FieldInfo.optional("optionalField2", "optionalField2Text"),
+            FieldInfo.optional("optionalField3", "optionalField3Text")
     );
     private static final String GOOD_ENTRY_SEPARATOR = "entry_separator";
     private static final String GOOD_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
@@ -38,8 +37,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksPackageNameIsNotNull() {
         victim.createALogFormatEnforcer(
                 null,
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -51,8 +49,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksPackageNameIsNotEmpty() {
         victim.createALogFormatEnforcer(
                 "",
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -64,8 +61,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksPackageNameDoesNotHaveSpaces() {
         victim.createALogFormatEnforcer(
                 "a.in val id.package",
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -77,8 +73,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksPackageNameDoesNotHaveOtherInvalidCharacters() {
         victim.createALogFormatEnforcer(
                 "um.package.inválido",
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -87,23 +82,9 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksMandatoryFieldsAreNotNull() {
+    public void checksFieldsAreNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
-                null,
-                GOOD_OPTIONAL_FIELDS,
-                GOOD_ENTRY_SEPARATOR,
-                GOOD_VALUE_DELIMITER_PREFIX,
-                GOOD_VALUE_DELIMITER_SUFFIX,
-                GOOD_KEY_VALUE_SEPARATOR
-        );
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void checksOptionalFieldsAreNotNull() {
-        victim.createALogFormatEnforcer(
-                GOOD_PACKAGE_NAME,
-                GOOD_MANDATORY_FIELDS,
                 null,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
@@ -116,8 +97,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksEntrySeparatorIsNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 null,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -129,8 +109,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksValueDelimiterPrefixIsNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 null,
                 GOOD_VALUE_DELIMITER_SUFFIX,
@@ -142,8 +121,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksValueDelimiterSuffixIsNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 null,
@@ -155,8 +133,7 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     public void checksKeyValueSeparatorIsNotNull() {
         victim.createALogFormatEnforcer(
                 GOOD_PACKAGE_NAME,
-                GOOD_MANDATORY_FIELDS,
-                GOOD_OPTIONAL_FIELDS,
+                GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
                 GOOD_VALUE_DELIMITER_PREFIX,
                 GOOD_VALUE_DELIMITER_SUFFIX,

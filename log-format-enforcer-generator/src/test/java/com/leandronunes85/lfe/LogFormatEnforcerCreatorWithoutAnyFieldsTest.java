@@ -8,14 +8,10 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
+public class LogFormatEnforcerCreatorWithoutAnyFieldsTest {
 
     private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
-    private static final List<FieldInfo> EXPECTED_FIELDS = asList(
-            FieldInfo.optional("optionalField1", "optionalField1Text"),
-            FieldInfo.optional("optionalField2", "optionalField2Text"),
-            FieldInfo.optional("optionalField3", "optionalField3Text")
-    );
+    private static final List<FieldInfo> EXPECTED_FIELDS = asList();
     private static final String EXPECTED_ENTRY_SEPARATOR = "entry_separator";
     private static final String EXPECTED_VALUE_DELIMITER_PREFIX = "value_delimeter_prefix";
     private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
@@ -36,15 +32,13 @@ public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
         );
     }
 
-
     @Test
-    public void createsClassFromTemplate() {
-        assertThat(result).isNotNull();
+    public void createsActualBuilderThatImplementsOnlyTheLastInterface() {
+        assertThat(result).contains("private class ActualBuilder implements OtherFields ");
     }
 
     @Test
-    public void createsActualBuilderCreatesToBuildInterfaceWithCorrectEntryPoint() {
-        assertThat(result).contains("OtherFields buildIt(OptionalField1 builder);");
+    public void buildItInterfaceReceivesAndReturnsLastInterface () {
+        assertThat(result).contains("OtherFields buildIt(OtherFields builder);");
     }
-
 }
