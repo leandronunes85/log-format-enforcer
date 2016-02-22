@@ -4,8 +4,7 @@ logFormatEnforcer(package,
                     valueDelimiterPrefix,
                     valueDelimiterSuffix,
                     keyValueSeparator,
-                    builderEntryPoint,
-                    lastInterfaceName) ::= <<
+                    builderEntryPoint) ::= <<
 package <package>;
 
 import org.slf4j.Logger;
@@ -55,24 +54,34 @@ public class LogFormatEnforcer {
     }
 
     public interface ToBuild {
-        <lastInterfaceName> buildIt(<builderEntryPoint> builder);
+        NoMoreFields buildIt(<builderEntryPoint> builder);
     }
 
     <expandedFieldInfos:interface(); separator="\n\n">
 
-    public interface <lastInterfaceName> {
-        <lastInterfaceName> other(String name, Object value);
+    public interface MoreFields extends NoMoreFields {
+        MoreFields other(String name, Object value);
+
+        NoMoreFields exception(Throwable value);
     }
 
-    private class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif><lastInterfaceName> {
+    public interface NoMoreFields {
+    }
+
+    private class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif>MoreFields, NoMoreFields {
 
         private final ArrayList\<String\> messages = new ArrayList\<\>();
         private final ArrayList\<Object\> values = new ArrayList\<\>();
 
         <expandedFieldInfos:actualBuilderMethod();separator="\n\n">
 
-        public <lastInterfaceName> other(String name, Object value) {
+        public MoreFields other(String name, Object value) {
             return newField(name, value);
+        }
+
+        public NoMoreFields exception(Throwable value) {
+            this.values.add(value);
+            return this;
         }
 
         private ActualBuilder newField(String name, Object value) {

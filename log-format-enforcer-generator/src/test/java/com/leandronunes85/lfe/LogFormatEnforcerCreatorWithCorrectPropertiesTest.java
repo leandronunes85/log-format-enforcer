@@ -78,22 +78,22 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
 
     @Test
     public void createsClassWithInterfaceForLastOptionalField() {
-        assertThat(result).contains("interface OptionalField3 extends OtherFields ");
-        assertThat(result).contains("OtherFields optionalField3(Object optionalField3)");
+        assertThat(result).contains("interface OptionalField3 extends MoreFields ");
+        assertThat(result).contains("MoreFields optionalField3(Object optionalField3)");
     }
 
     @Test
     public void createsClassWithOtherFieldsInterface() {
-        assertThat(result).contains("public interface OtherFields {\n" +
-                "        OtherFields other(String name, Object value);\n" +
-                "    }");
+        assertThat(result).contains("public interface MoreFields ");
+        assertThat(result).contains("MoreFields other(String name, Object value);");
+        assertThat(result).contains("NoMoreFields exception(Throwable value);");
     }
 
     @Test
     public void createsActualBuilderClassThatImplementsAllInterfaces() {
         assertThat(result).contains("private class ActualBuilder " +
                 "implements MandatoryField1, MandatoryField2, MandatoryField3, " +
-                "OptionalField1, OptionalField2, OptionalField3, OtherFields");
+                "OptionalField1, OptionalField2, OptionalField3, MoreFields, NoMoreFields");
     }
 
     @Test
@@ -113,7 +113,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
         assertThat(result).contains("public OptionalField3 optionalField2(Object optionalField2)");
         assertThat(result).contains("return newField(\"optionalField2Text\", optionalField2);");
 
-        assertThat(result).contains("public OtherFields optionalField3(Object optionalField3)");
+        assertThat(result).contains("public MoreFields optionalField3(Object optionalField3)");
         assertThat(result).contains("return newField(\"optionalField3Text\", optionalField3);");
     }
 
@@ -130,6 +130,6 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
 
     @Test
     public void toBuildInterfaceContainsCorrectEntryPoint() {
-        assertThat(result).contains("OtherFields buildIt(MandatoryField1 builder);");
+        assertThat(result).contains("NoMoreFields buildIt(MandatoryField1 builder);");
     }
 }

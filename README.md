@@ -108,6 +108,11 @@ separate keys and values (because you fancy Java 8)? Just update your pom, like 
 ```
 Rebuild it, release it and that's it!
 
+###### Note 
+>Behind the scenes LogFormatEnforcer relies on slf4j for the actual logging work so you must provide it in your 
+>project dependencies.  
+
+
 ## Wrap up
 As I said, this is still a prototype, there's still bugs that I'm aware of and many other that I'm not, for sure. 
 Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!

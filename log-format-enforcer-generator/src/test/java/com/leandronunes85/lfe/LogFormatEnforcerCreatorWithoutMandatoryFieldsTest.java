@@ -44,7 +44,7 @@ public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
 
     @Test
     public void createsActualBuilderCreatesToBuildInterfaceWithCorrectEntryPoint() {
-        assertThat(result).contains("OtherFields buildIt(OptionalField1 builder);");
+        assertThat(result).contains("NoMoreFields buildIt(OptionalField1 builder);");
     }
 
 }

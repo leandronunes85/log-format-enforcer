@@ -16,7 +16,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public class LogFormatEnforcerCreator {
 
     private static final Pattern PACKAGE_PATTERN = compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*");
-    private static final String LAST_INTERFACE_NAME = "OtherFields";
+    private static final String LAST_INTERFACE_NAME = "MoreFields";
     private static final STGroupFile TEMPLATE = new STGroupFile("templates/LogFormatEnforcer.stg");
 
 
@@ -44,7 +44,6 @@ public class LogFormatEnforcerCreator {
                 .add("valueDelimiterSuffix", sanitizeIt(withValueDelimiterSuffix))
                 .add("keyValueSeparator", sanitizeIt(withKeyValueSeparator))
                 .add("builderEntryPoint", builderEntryPoint)
-                .add("lastInterfaceName", LAST_INTERFACE_NAME)
                 .render();
     }
 

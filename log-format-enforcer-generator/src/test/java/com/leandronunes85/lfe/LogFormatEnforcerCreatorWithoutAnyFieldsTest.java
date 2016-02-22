@@ -34,11 +34,11 @@ public class LogFormatEnforcerCreatorWithoutAnyFieldsTest {
 
     @Test
     public void createsActualBuilderThatImplementsOnlyTheLastInterface() {
-        assertThat(result).contains("private class ActualBuilder implements OtherFields ");
+        assertThat(result).contains("private class ActualBuilder implements MoreFields, NoMoreFields ");
     }
 
     @Test
     public void buildItInterfaceReceivesAndReturnsLastInterface () {
-        assertThat(result).contains("OtherFields buildIt(OtherFields builder);");
+        assertThat(result).contains("NoMoreFields buildIt(MoreFields builder);");
     }
 }
