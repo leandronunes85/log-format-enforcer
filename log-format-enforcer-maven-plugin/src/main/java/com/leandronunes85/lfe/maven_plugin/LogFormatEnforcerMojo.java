@@ -18,10 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,10 +39,10 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     private MavenProject project;
 
     @Parameter
-    private Map<String, String> mandatoryFields = new HashMap<>();
+    private LinkedHashMap<String, String> mandatoryFields = new LinkedHashMap<>();
 
     @Parameter
-    private Map<String, String> optionalFields = new HashMap<>();
+    private LinkedHashMap<String, String> optionalFields = new LinkedHashMap<>();
 
     @Parameter(required = true)
     private String packageName;
