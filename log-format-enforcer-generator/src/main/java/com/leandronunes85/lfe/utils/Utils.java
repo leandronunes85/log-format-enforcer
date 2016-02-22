@@ -13,6 +13,10 @@ public final class Utils {
     private Utils() {
     }
 
+    public static String sanitizeIt(String input) {
+        return input.replaceAll("[\"]", "\\\\\"");
+    }
+
     public static String capitalizeIt(String input) {
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }

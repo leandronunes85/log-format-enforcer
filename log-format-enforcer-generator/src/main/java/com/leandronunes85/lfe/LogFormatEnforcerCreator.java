@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.leandronunes85.lfe.utils.Utils.pairingWithNextElement;
+import static com.leandronunes85.lfe.utils.Utils.sanitizeIt;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -38,10 +39,10 @@ public class LogFormatEnforcerCreator {
         return TEMPLATE.getInstanceOf("logFormatEnforcer")
                 .add("package", withPackageName)
                 .add("expandedFieldInfos", expandedFieldInfos)
-                .add("entrySeparator", withEntrySeparator)
-                .add("valueDelimiterPrefix", withValueDelimiterPrefix)
-                .add("valueDelimiterSuffix", withValueDelimiterSuffix)
-                .add("keyValueSeparator", withKeyValueSeparator)
+                .add("entrySeparator", sanitizeIt(withEntrySeparator))
+                .add("valueDelimiterPrefix", sanitizeIt(withValueDelimiterPrefix))
+                .add("valueDelimiterSuffix", sanitizeIt(withValueDelimiterSuffix))
+                .add("keyValueSeparator", sanitizeIt(withKeyValueSeparator))
                 .add("builderEntryPoint", builderEntryPoint)
                 .add("lastInterfaceName", LAST_INTERFACE_NAME)
                 .render();
