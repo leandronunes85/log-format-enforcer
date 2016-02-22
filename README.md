@@ -31,11 +31,24 @@ log.trace("msg='Other message', op=otherMethod, input='{}', output='{}'", input,
 This is an actual example of some messages a team where I worked before agreed upon: 'msg' and 'op' would always be 
 present. For some cases (tipically trace messages) we would log 'input' and 'output'. Every message could have any 
 number of unknown fields.
-##### Note 
-Even with these simple rules there was always problems: some people would use 'message' instead of 'msg' or 'operation'
-instead of 'op', quotes were commonly forgotten, same for commas between each field
+###### Note 
+>Even with these simple rules there was always problems: some people would use 'message' instead of 'msg' or 'operation'
+>instead of 'op', quotes were commonly forgotten, same for commas between each field
 
 ## After
+In your class:
+```java
+private static final LogFormatEnforcer log = LogFormatEnforcer.loggerFor(MyClass.class); 
+...
+log.log(INFO, b -> b.msg("This is a message").op("someMethod").other("someValue", someValue));
+...
+log.log(TRACE, b-> b.msg("Other message").op("otherMethod").input(input).output(output));
+...
+```
+And I dare you trying to break the agreed rules now. 
+###### Note 
+>If you do, please let me know; this is still an early prototype ;)
+
 In the pom.xml:
 ```xml
 <plugin>
@@ -62,21 +75,8 @@ In the pom.xml:
     </executions>
 </plugin>
 ```
-In your class:
-```java
-private static final LogFormatEnforcer log = LogFormatEnforcer.loggerFor(MyClass.class); 
-...
-log.log(INFO, b -> b.msg("This is a message").op("someMethod").other("someValue", someValue));
-...
-log.log(TRACE, b-> b.msg("Other message").op("otherMethod").input(input).output(output));
-...
-```
-And I dare you trying to break the agreed rules now. 
-##### Note 
-If you do, please let me know; this is still an early prototype ;)
-
-Now, do you want to enclose your values in square brackets (because it's easier for you to parse it) and use "->" to 
-seperate you keys and values (because you fancy Java 8)? Just update your pom, like this:
+Now, if you want to enclose your values in square brackets (because it's easier for you to parse it) and use "->" to 
+seperate keys and values (because you fancy Java 8)? Just update your pom, like this:
 ```xml
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
@@ -109,4 +109,4 @@ Rebuild it, release it and that's it!
 
 ## Wrap up
 As I said, this is still a prototype, there's still bugs that I'm aware of and many other that I'm not, for sure. 
-Your comments, suggestions, etc, are all welcome so please drop me a line!
+Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!
