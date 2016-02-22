@@ -1,8 +1,9 @@
 # Log Format Enforcer
 
-The goal of this maven plugin teams with a way of enforcing a certain logging message style in their prjects. I often 
-find myself working in projects where certain log guidelines were agreed upon. In my opinion this is awesome because it 
-makes it easier for parsing these kind of logs, it introduces consistency amongst the logs created by every team member,
+The goal of this maven plugin is to provide teams with a way of enforcing a certain logging message style in their projects. 
+
+I often find myself working in projects where certain log guidelines were agreed upon. In my opinion this is awesome 
+because this kind of logs are easier to parse, it introduces consistency amongst the logs created by every team member,
 etc, etc.
 
 The only problem with this approach is that usually there's no way for enforcing these "agreed rules" which leads to 
@@ -29,7 +30,7 @@ log.trace("msg='Other message', op=otherMethod, input='{}', output='{}'", input,
 ...
 ```
 This is an actual example of some messages a team where I worked before agreed upon: 'msg' and 'op' would always be 
-present. For some cases (tipically trace messages) we would log 'input' and 'output'. Every message could have any 
+present. For some cases (typically trace messages) we would log 'input' and 'output'. Every message could have any 
 number of unknown fields.
 ###### Note 
 >Even with these simple rules there was always problems: some people would use 'message' instead of 'msg' or 'operation'
@@ -40,9 +41,9 @@ In your class:
 ```java
 private static final LogFormatEnforcer log = LogFormatEnforcer.loggerFor(MyClass.class); 
 ...
-log.log(INFO, b -> b.msg("This is a message").op("someMethod").other("someValue", someValue));
+log.log(INFO, logMessage -> logMessage.msg("This is a message").op("someMethod").other("someValue", someValue));
 ...
-log.log(TRACE, b-> b.msg("Other message").op("otherMethod").input(input).output(output));
+log.log(TRACE, logMessage -> logMessage.msg("Other message").op("otherMethod").input(input).output(output));
 ...
 ```
 And I dare you trying to break the agreed rules now. 
@@ -75,8 +76,8 @@ In the pom.xml:
     </executions>
 </plugin>
 ```
-Now, if you want to enclose your values in square brackets (because it's easier for you to parse it) and use "->" to 
-seperate keys and values (because you fancy Java 8)? Just update your pom, like this:
+Now, do you want to enclose your values in square brackets (because it's easier for you to parse it) and use "->" to 
+separate keys and values (because you fancy Java 8)? Just update your pom, like this:
 ```xml
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
