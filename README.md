@@ -24,9 +24,9 @@ All these are problems that this library tries to address.
 ```java
 private static final Logger log = LoggerFactory.getLogger(MyClass.class); // or something similar
 ...
-log.info("msg='This is a message', op=someMethod, someValue='{}'", someValue);
+log.info("op=someMethod, msg='This is a message', someValue='{}'", someValue);
 ...
-log.trace("msg='Other message', op=otherMethod, input='{}', output='{}'", input, output);
+log.trace("op=otherMethod, msg='Other message', input='{}', output='{}'", input, output);
 ...
 ```
 This is an actual example of some messages a team where I worked before agreed upon: 'msg' and 'op' would always be 
