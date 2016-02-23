@@ -41,9 +41,9 @@ In your class:
 ```java
 private static final LogFormatEnforcer log = LogFormatEnforcer.loggerFor(MyClass.class); 
 ...
-log.log(INFO, logMessage -> logMessage.msg("This is a message").op("someMethod").other("someValue", someValue));
+log.log(INFO, logMessage -> logMessage.op("someMethod").msg("This is a message").other("someValue", someValue));
 ...
-log.log(TRACE, logMessage -> logMessage.msg("Other message").op("otherMethod").input(input).output(output));
+log.log(TRACE, logMessage -> logMessage.op("otherMethod").msg("Other message").input(input).output(output));
 ...
 ```
 And I dare you trying to break the agreed rules now. 
@@ -59,8 +59,8 @@ In the pom.xml:
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
-            <msg />
             <op />
+            <msg />
         </mandatoryFields>
         <optionalFields>
             <input />
