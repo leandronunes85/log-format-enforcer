@@ -13,18 +13,18 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
@@ -59,40 +59,52 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     @Parameter(defaultValue = "=")
     private String keyValueSeparator;
 
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/log-format-enforcer-maven-plugin/", required = true)
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/log-format-enforcer/", required = true)
     private File outputDirectory;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         logParameters();
 
-        Path pathToWrite = findWhereToWrite();
-        getLog().info("Writing " + pathToWrite.toString());
-
-        pathToWrite.getParent().toFile().mkdirs();
-        String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(packageName, getFieldInfoList(),
-                entrySeparator, valueDelimiterPrefix, valueDelimiterSuffix, keyValueSeparator);
         try {
+            Path pathToWrite = findWhereToWrite();
+            getLog().info("Writing " + pathToWrite.toString());
+            String logFormatEnforcerContents = generateClass();
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
             project.addCompileSourceRoot(outputDirectory.getPath());
             getLog().info("File successfully written");
         } catch (IOException e) {
-            throw new MojoExecutionException("Error writing LogFormatEnforcer.java", e);
+            throw new MojoExecutionException("Error writing " + FILE_NAME, e);
         }
     }
 
+    private String generateClass() {
+        String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(
+                packageName,
+                getFieldInfoList(),
+                entrySeparator,
+                valueDelimiterPrefix,
+                valueDelimiterSuffix,
+                keyValueSeparator);
+        getLog().debug("logFormatEnforcerContents:");
+        getLog().debug(logFormatEnforcerContents);
+        return logFormatEnforcerContents;
+    }
+
     private List<FieldInfo> getFieldInfoList() {
+
         Stream<FieldInfo> mandatory = mandatoryFields.entrySet().stream()
-                .map(e -> FieldInfo.mandatory(e.getKey(), firstNonNull(e.getValue(), e.getKey())));
+                .map(FieldInfo::mandatory);
         Stream<FieldInfo> optional = optionalFields.entrySet().stream()
-                .map(e -> FieldInfo.optional(e.getKey(), firstNonNull(e.getValue(), e.getKey())));
+                .map(FieldInfo::optional);
 
         return concat(mandatory, optional).collect(toList());
     }
 
-    private Path findWhereToWrite() {
-        return Paths
-                .get(outputDirectory.getAbsolutePath(), packageName.split("\\."))
-                .resolve(FILE_NAME);
+    private Path findWhereToWrite() throws IOException {
+        Path path = Paths
+                .get(outputDirectory.getAbsolutePath(), packageName.split("\\."));
+        Files.createDirectories(path);
+        return path.resolve(FILE_NAME);
     }
 
     private void logParameters() {
