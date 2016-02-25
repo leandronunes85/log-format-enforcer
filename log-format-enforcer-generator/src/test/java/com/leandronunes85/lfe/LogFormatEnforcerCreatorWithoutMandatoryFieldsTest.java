@@ -1,5 +1,7 @@
 package com.leandronunes85.lfe;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,9 +10,9 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
+public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest extends AbstractTest {
 
-    private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
+    private static final String EXPECTED_PACKAGE_NAME = "expected.name";
     private static final List<FieldInfo> EXPECTED_FIELDS = asList(
             FieldInfo.optional("optionalField1", "optionalField1Text"),
             FieldInfo.optional("optionalField2", "optionalField2Text"),
@@ -21,12 +23,10 @@ public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
     private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String EXPECTED_KEY_VALUE_SEPARATOR = "key_value_separator";
 
-    private String result;
 
     @Before
-    public void setUp() {
-        LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
-        this.result = victim.createALogFormatEnforcer(
+    public void setUp() throws Exception {
+        createFile(
                 EXPECTED_PACKAGE_NAME,
                 EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
@@ -36,15 +36,13 @@ public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest {
         );
     }
 
-
     @Test
-    public void createsClassFromTemplate() {
-        assertThat(result).isNotNull();
-    }
+    public void toBuildInterfaceHasCorrectEntryPoint() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ToBuild");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "buildIt");
 
-    @Test
-    public void createsActualBuilderCreatesToBuildInterfaceWithCorrectEntryPoint() {
-        assertThat(result).contains("NoMoreFields buildIt(OptionalField1 builder);");
+        assertThat(methodDeclaration.getDeclarationAsString(true, true, false))
+                .isEqualTo("NoMoreFields buildIt(OptionalField1)");
     }
 
 }

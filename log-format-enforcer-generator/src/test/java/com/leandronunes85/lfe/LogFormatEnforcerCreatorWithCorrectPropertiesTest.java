@@ -1,17 +1,21 @@
 package com.leandronunes85.lfe;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
+public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractTest {
 
-    private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
+    private static final String EXPECTED_PACKAGE_NAME = "expected.name";
     private static final List<FieldInfo> EXPECTED_FIELDS = asList(
             FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
             FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
@@ -26,13 +30,10 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
     private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String EXPECTED_KEY_VALUE_SEPARATOR = "key_value_separator";
 
-    private String result;
-
     @Before
-    public void setUp() {
-        LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
-        this.result = victim.createALogFormatEnforcer(
-                EXPECTED_PACKAGE_NAME,
+    public void setUp() throws Exception {
+
+        createFile(EXPECTED_PACKAGE_NAME,
                 EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
                 EXPECTED_VALUE_DELIMITER_PREFIX,
@@ -43,93 +44,191 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest {
 
     @Test
     public void createsClassInTheCorrectPackage() {
-        assertThat(result).startsWith(format("package %s;", EXPECTED_PACKAGE_NAME));
+        assertThat(compilationUnit.getPackage().getName().toString()).isEqualTo(EXPECTED_PACKAGE_NAME);
     }
 
     @Test
-    public void createsClassWithInterfaceForFirstMandatoryField() {
-        assertThat(result).contains("interface MandatoryField1 ");
-        assertThat(result).contains("MandatoryField2 mandatoryField1(Object mandatoryField1)");
+    public void createsInterfaceForFirstMandatoryField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField1");
+        MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField1");
+
+        assertThat(classOrInterface.getExtends()).isNullOrEmpty();
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("MandatoryField2 mandatoryField1(Object)");
     }
 
     @Test
-    public void createsClassWithInterfaceForSecondMandatoryField() {
-        assertThat(result).contains("interface MandatoryField2 ");
-        assertThat(result).contains("MandatoryField3 mandatoryField2(Object mandatoryField2)");
+    public void createsInterfaceForSecondMandatoryField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField2");
+        MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField2");
+
+        assertThat(classOrInterface.getExtends()).isNullOrEmpty();
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("MandatoryField3 mandatoryField2(Object)");
     }
 
     @Test
-    public void createsClassWithInterfaceForLastMandatoryField() {
-        assertThat(result).contains("interface MandatoryField3 ");
-        assertThat(result).contains("OptionalField1 mandatoryField3(Object mandatoryField3)");
+    public void createsInterfaceForLastMandatoryField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField3");
+        MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField3");
+
+        assertThat(classOrInterface.getExtends()).isNullOrEmpty();
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("OptionalField1 mandatoryField3(Object)");
     }
 
     @Test
-    public void createsClassWithInterfaceForFirstOptionalField() {
-        assertThat(result).contains("interface OptionalField1 extends OptionalField2 ");
-        assertThat(result).contains("OptionalField2 optionalField1(Object optionalField1)");
+    public void createsInterfaceForFirstOptionalField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField1");
+        MethodDeclaration method = getMethodByName(classOrInterface, "optionalField1");
+
+        assertThat(classOrInterface.getExtends()).hasSize(1);
+        assertThat(classOrInterface.getExtends().get(0).getName()).isEqualTo("OptionalField2");
+
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("OptionalField2 optionalField1(Object)");
     }
 
     @Test
-    public void createsClassWithInterfaceForSecondOptionalField() {
-        assertThat(result).contains("interface OptionalField2 extends OptionalField3 ");
-        assertThat(result).contains("OptionalField3 optionalField2(Object optionalField2)");
+    public void createsInterfaceForSecondOptionalField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField2");
+        MethodDeclaration method = getMethodByName(classOrInterface, "optionalField2");
+
+        assertThat(classOrInterface.getExtends()).hasSize(1);
+        assertThat(classOrInterface.getExtends().get(0).getName()).isEqualTo("OptionalField3");
+
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("OptionalField3 optionalField2(Object)");
     }
 
     @Test
-    public void createsClassWithInterfaceForLastOptionalField() {
-        assertThat(result).contains("interface OptionalField3 extends MoreFields ");
-        assertThat(result).contains("MoreFields optionalField3(Object optionalField3)");
+    public void createsInterfaceForLastOptionalField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField3");
+        MethodDeclaration method = getMethodByName(classOrInterface, "optionalField3");
+
+        assertThat(classOrInterface.getExtends()).hasSize(1);
+        assertThat(classOrInterface.getExtends().get(0).getName()).isEqualTo("MoreFields");
+
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("MoreFields optionalField3(Object)");
     }
 
     @Test
-    public void createsClassWithOtherFieldsInterface() {
-        assertThat(result).contains("public interface MoreFields ");
-        assertThat(result).contains("MoreFields other(String name, Object value);");
-        assertThat(result).contains("NoMoreFields exception(Throwable value);");
+    public void createsMoreFieldsInterface() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MoreFields");
+        MethodDeclaration andMethod = getMethodByName(classOrInterface, "and");
+        MethodDeclaration exceptionMethod = getMethodByName(classOrInterface, "exception");
+
+        assertThat(andMethod.getDeclarationAsString(true, true, false))
+                .isEqualTo("MoreFields and(String, Object)");
+        assertThat(exceptionMethod.getDeclarationAsString(true, true, false))
+                .isEqualTo("NoMoreFields exception(Throwable)");
     }
 
     @Test
     public void createsActualBuilderClassThatImplementsAllInterfaces() {
-        assertThat(result).contains("private class ActualBuilder " +
-                "implements MandatoryField1, MandatoryField2, MandatoryField3, " +
-                "OptionalField1, OptionalField2, OptionalField3, MoreFields, NoMoreFields");
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        Stream<String> implementationNames = classOrInterface.getImplements().stream().map(ClassOrInterfaceType::getName);
+
+        assertThat(implementationNames).containsExactly("MandatoryField1", "MandatoryField2", "MandatoryField3",
+                "OptionalField1", "OptionalField2", "OptionalField3", "MoreFields", "NoMoreFields");
     }
 
     @Test
-    public void createsActualBuilderClassThatContainsSetterForAllFields() {
-        assertThat(result).contains("public MandatoryField2 mandatoryField1(Object mandatoryField1)");
-        assertThat(result).contains("return newField(\"mandatoryField1Text\", mandatoryField1);");
+    public void actualBuilderClassContainsSetterForMandatoryField1() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField1");
 
-        assertThat(result).contains("public MandatoryField3 mandatoryField2(Object mandatoryField2)");
-        assertThat(result).contains("return newField(\"mandatoryField2Text\", mandatoryField2);");
-
-        assertThat(result).contains("public OptionalField1 mandatoryField3(Object mandatoryField3)");
-        assertThat(result).contains("return newField(\"mandatoryField3Text\", mandatoryField3);");
-
-        assertThat(result).contains("public OptionalField2 optionalField1(Object optionalField1)");
-        assertThat(result).contains("return newField(\"optionalField1Text\", optionalField1);");
-
-        assertThat(result).contains("public OptionalField3 optionalField2(Object optionalField2)");
-        assertThat(result).contains("return newField(\"optionalField2Text\", optionalField2);");
-
-        assertThat(result).contains("public MoreFields optionalField3(Object optionalField3)");
-        assertThat(result).contains("return newField(\"optionalField3Text\", optionalField3);");
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public MandatoryField2 mandatoryField1(Object mandatoryField1)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"mandatoryField1Text\", mandatoryField1);");
     }
 
     @Test
-    public void createsActualBuilderUsesConfiguredSeparator() {
-        assertThat(result).contains(format("joining(\"%s\")", EXPECTED_ENTRY_SEPARATOR));
+    public void actualBuilderClassContainsSetterForMandatoryField2() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField2");
+
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public MandatoryField3 mandatoryField2(Object mandatoryField2)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"mandatoryField2Text\", mandatoryField2);");
+
     }
 
     @Test
-    public void createsActualBuilderUsesConfiguredValueDelimiter() {
-        assertThat(result).contains(format("%s%s{}%s\"",
-                EXPECTED_KEY_VALUE_SEPARATOR, EXPECTED_VALUE_DELIMITER_PREFIX, EXPECTED_VALUE_DELIMITER_SUFFIX));
+    public void actualBuilderClassContainsSetterForMandatoryField3() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField3");
+
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public OptionalField1 mandatoryField3(Object mandatoryField3)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"mandatoryField3Text\", mandatoryField3);");
+
+    }
+
+    @Test
+    public void actualBuilderClassContainsSetterForOptionalField1() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField1");
+
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public OptionalField2 optionalField1(Object optionalField1)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"optionalField1Text\", optionalField1);");
+
+    }
+
+    @Test
+    public void actualBuilderClassContainsSetterForOptionalField2() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField2");
+
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public OptionalField3 optionalField2(Object optionalField2)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"optionalField2Text\", optionalField2);");
+    }
+
+    @Test
+    public void actualBuilderClassContainsSetterForOptionalField3() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField3");
+
+        assertThat(methodDeclaration.getDeclarationAsString())
+                .isEqualTo("public MoreFields optionalField3(Object optionalField3)");
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .isEqualTo("return newField(\"optionalField3Text\", optionalField3);");
+
+    }
+
+    @Test
+    public void actualBuilderClassUsesConfiguredSeparator() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "getMessage");
+
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .contains(format("joining(\"%s\")", EXPECTED_ENTRY_SEPARATOR));
+    }
+
+    @Test
+    public void actualBuilderClassUsesConfiguredValueSeparatorAndDelimiters() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "newField");
+
+        assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
+                .contains(format("%s%s{}%s\"",
+                        EXPECTED_KEY_VALUE_SEPARATOR, EXPECTED_VALUE_DELIMITER_PREFIX, EXPECTED_VALUE_DELIMITER_SUFFIX));
     }
 
     @Test
     public void toBuildInterfaceContainsCorrectEntryPoint() {
-        assertThat(result).contains("NoMoreFields buildIt(MandatoryField1 builder);");
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ToBuild");
+        MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "buildIt");
+
+        assertThat(methodDeclaration.getDeclarationAsString(true, true, false))
+                .isEqualTo("NoMoreFields buildIt(MandatoryField1)");
     }
 }

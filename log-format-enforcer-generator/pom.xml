@@ -20,6 +20,7 @@
         <!--test dependencies-->
         <junit.version>4.12</junit.version>
         <assertj-core.version>3.3.0</assertj-core.version>
+        <javaparser-core.version>2.1.0</javaparser-core.version>
     </properties>
 
     <dependencies>
@@ -49,6 +50,12 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>${javaparser-core.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

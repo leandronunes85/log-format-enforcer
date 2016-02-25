@@ -1,5 +1,7 @@
 package com.leandronunes85.lfe;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,9 +10,9 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest {
+public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest extends AbstractTest {
 
-    private static final String EXPECTED_PACKAGE_NAME = "expected.package.name";
+    private static final String EXPECTED_PACKAGE_NAME = "expected.name";
     private static final List<FieldInfo> EXPECTED_FIELDS = asList(
             FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
             FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
@@ -21,12 +23,9 @@ public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest {
     private static final String EXPECTED_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String EXPECTED_KEY_VALUE_SEPARATOR = "key_value_separator";
 
-    private String result;
-
     @Before
-    public void setUp() {
-        LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
-        this.result = victim.createALogFormatEnforcer(
+    public void setUp() throws Exception {
+        createFile(
                 EXPECTED_PACKAGE_NAME,
                 EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
@@ -37,7 +36,12 @@ public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest {
     }
 
     @Test
-    public void createsClassFromTemplate() {
-        assertThat(result).isNotNull();
+    public void createsInterfaceForLastMandatoryField() {
+        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField3");
+        MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField3");
+
+        assertThat(classOrInterface.getExtends()).isNullOrEmpty();
+        assertThat(method.getDeclarationAsString(true, true, false))
+                .isEqualTo("MoreFields mandatoryField3(Object)");
     }
 }

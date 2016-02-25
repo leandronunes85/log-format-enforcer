@@ -60,7 +60,7 @@ public class LogFormatEnforcer {
     <expandedFieldInfos:interface(); separator="\n\n">
 
     public interface MoreFields extends NoMoreFields {
-        MoreFields other(String name, Object value);
+        MoreFields and(String name, Object value);
 
         NoMoreFields exception(Throwable value);
     }
@@ -75,7 +75,7 @@ public class LogFormatEnforcer {
 
         <expandedFieldInfos:actualBuilderMethod();separator="\n\n">
 
-        public MoreFields other(String name, Object value) {
+        public MoreFields and(String name, Object value) {
             return newField(name, value);
         }
 

@@ -9,9 +9,9 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
+public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest extends AbstractTest {
 
-    private static final String GOOD_PACKAGE_NAME = "expected.package.name";
+    private static final String GOOD_PACKAGE_NAME = "expected.name";
     private static final List<FieldInfo> GOOD_FIELDS = asList(
             FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text"),
             FieldInfo.mandatory("mandatoryField2", "mandatoryField2Text"),
@@ -26,16 +26,10 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     private static final String GOOD_VALUE_DELIMITER_SUFFIX = "value_delimeter_suffix";
     private static final String GOOD_KEY_VALUE_SEPARATOR = "key_value_separator";
 
-    private LogFormatEnforcerCreator victim;
-
-    @Before
-    public void setUp() {
-        victim = new LogFormatEnforcerCreator();
-    }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksPackageNameIsNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksPackageNameIsNotNull() throws Exception {
+        createFile(
                 null,
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -46,8 +40,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksPackageNameIsNotEmpty() {
-        victim.createALogFormatEnforcer(
+    public void checksPackageNameIsNotEmpty() throws Exception {
+        createFile(
                 "",
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -58,8 +52,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksPackageNameDoesNotHaveSpaces() {
-        victim.createALogFormatEnforcer(
+    public void checksPackageNameDoesNotHaveSpaces() throws Exception {
+        createFile(
                 "a.in val id.package",
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -70,8 +64,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksPackageNameDoesNotHaveOtherInvalidCharacters() {
-        victim.createALogFormatEnforcer(
+    public void checksPackageNameDoesNotHaveOtherInvalidCharacters() throws Exception {
+        createFile(
                 "um.package.inválido",
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -82,8 +76,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksFieldsAreNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksFieldsAreNotNull() throws Exception {
+        createFile(
                 GOOD_PACKAGE_NAME,
                 null,
                 GOOD_ENTRY_SEPARATOR,
@@ -94,8 +88,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksEntrySeparatorIsNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksEntrySeparatorIsNotNull() throws Exception {
+        createFile(
                 GOOD_PACKAGE_NAME,
                 GOOD_FIELDS,
                 null,
@@ -106,8 +100,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksValueDelimiterPrefixIsNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksValueDelimiterPrefixIsNotNull() throws Exception {
+        createFile(
                 GOOD_PACKAGE_NAME,
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -118,8 +112,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksValueDelimiterSuffixIsNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksValueDelimiterSuffixIsNotNull() throws Exception {
+        createFile(
                 GOOD_PACKAGE_NAME,
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
@@ -130,8 +124,8 @@ public class LogFormatEnforcerCreatorWithIncorrectPropertiesTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checksKeyValueSeparatorIsNotNull() {
-        victim.createALogFormatEnforcer(
+    public void checksKeyValueSeparatorIsNotNull() throws Exception {
+        createFile(
                 GOOD_PACKAGE_NAME,
                 GOOD_FIELDS,
                 GOOD_ENTRY_SEPARATOR,
