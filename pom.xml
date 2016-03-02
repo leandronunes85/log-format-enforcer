@@ -24,7 +24,18 @@
 
     <scm>
         <url>https://github.com/leandronunes85/log-format-enforcer</url>
+        <connection>scm:git:https://github.com/leandronunes85/log-format-enforcer.git</connection>
+        <developerConnection>scm:git:https://github.com/leandronunes85/log-format-enforcer.git</developerConnection>
     </scm>
+
+    <developers>
+        <developer>
+            <id>leandronunes85</id>
+            <name>Leandro Nunes</name>
+            <email>leandronunes85@gmail.com</email>
+            <url>https://github.com/leandronunes85</url>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
