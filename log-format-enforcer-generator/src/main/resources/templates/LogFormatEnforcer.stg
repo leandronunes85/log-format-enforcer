@@ -43,14 +43,32 @@ public class LogFormatEnforcer {
         this.logLookup.put(Level.TRACE, logger::trace);
     }
 
-    public void log(Level level, ToBuild willBuild) {
+    public void error(ToBuild willBuild) {
+        log(Level.ERROR, willBuild);
+    }
 
+    public void warn(ToBuild willBuild) {
+        log(Level.WARN, willBuild);
+    }
+
+    public void info(ToBuild willBuild) {
+        log(Level.INFO, willBuild);
+    }
+
+    public void debug(ToBuild willBuild) {
+        log(Level.DEBUG, willBuild);
+    }
+
+    public void trace(ToBuild willBuild) {
+        log(Level.TRACE, willBuild);
+    }
+
+    private void log(Level level, ToBuild willBuild) {
         if (this.logEnabledLookup.get(level).getAsBoolean()) {
             ActualBuilder builder = new ActualBuilder();
             willBuild.buildIt(builder);
             this.logLookup.get(level).accept(builder.getMessage(), builder.getArguments());
         }
-
     }
 
     public interface ToBuild {

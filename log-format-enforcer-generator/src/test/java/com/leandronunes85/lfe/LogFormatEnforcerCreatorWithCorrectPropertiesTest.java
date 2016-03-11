@@ -32,7 +32,6 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Before
     public void setUp() throws Exception {
-
         createFile(EXPECTED_PACKAGE_NAME,
                 EXPECTED_FIELDS,
                 EXPECTED_ENTRY_SEPARATOR,
@@ -43,13 +42,8 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
     }
 
     @Test
-    public void createsClassInTheCorrectPackage() {
-        assertThat(compilationUnit.getPackage().getName().toString()).isEqualTo(EXPECTED_PACKAGE_NAME);
-    }
-
-    @Test
     public void createsInterfaceForFirstMandatoryField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField1");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField1");
         MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField1");
 
         assertThat(classOrInterface.getExtends()).isNullOrEmpty();
@@ -59,7 +53,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsInterfaceForSecondMandatoryField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField2");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField2");
         MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField2");
 
         assertThat(classOrInterface.getExtends()).isNullOrEmpty();
@@ -69,7 +63,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsInterfaceForLastMandatoryField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField3");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField3");
         MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField3");
 
         assertThat(classOrInterface.getExtends()).isNullOrEmpty();
@@ -79,7 +73,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsInterfaceForFirstOptionalField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField1");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("OptionalField1");
         MethodDeclaration method = getMethodByName(classOrInterface, "optionalField1");
 
         assertThat(classOrInterface.getExtends()).hasSize(1);
@@ -91,7 +85,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsInterfaceForSecondOptionalField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField2");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("OptionalField2");
         MethodDeclaration method = getMethodByName(classOrInterface, "optionalField2");
 
         assertThat(classOrInterface.getExtends()).hasSize(1);
@@ -103,7 +97,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsInterfaceForLastOptionalField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("OptionalField3");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("OptionalField3");
         MethodDeclaration method = getMethodByName(classOrInterface, "optionalField3");
 
         assertThat(classOrInterface.getExtends()).hasSize(1);
@@ -115,7 +109,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsMoreFieldsInterface() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MoreFields");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MoreFields");
         MethodDeclaration andMethod = getMethodByName(classOrInterface, "and");
         MethodDeclaration exceptionMethod = getMethodByName(classOrInterface, "exception");
 
@@ -127,7 +121,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void createsActualBuilderClassThatImplementsAllInterfaces() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         Stream<String> implementationNames = classOrInterface.getImplements().stream().map(ClassOrInterfaceType::getName);
 
         assertThat(implementationNames).containsExactly("MandatoryField1", "MandatoryField2", "MandatoryField3",
@@ -136,7 +130,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForMandatoryField1() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField1");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -147,7 +141,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForMandatoryField2() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField2");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -159,7 +153,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForMandatoryField3() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "mandatoryField3");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -171,7 +165,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForOptionalField1() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField1");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -183,7 +177,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForOptionalField2() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField2");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -194,7 +188,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassContainsSetterForOptionalField3() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "optionalField3");
 
         assertThat(methodDeclaration.getDeclarationAsString())
@@ -206,7 +200,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassUsesConfiguredSeparator() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "getMessage");
 
         assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
@@ -215,7 +209,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void actualBuilderClassUsesConfiguredValueSeparatorAndDelimiters() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "newField");
 
         assertThat(methodDeclaration.getBody().getStmts().get(0).toString())
@@ -225,7 +219,7 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
     @Test
     public void toBuildInterfaceContainsCorrectEntryPoint() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ToBuild");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ToBuild");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "buildIt");
 
         assertThat(methodDeclaration.getDeclarationAsString(true, true, false))

@@ -4,6 +4,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,24 +48,32 @@ public class AbstractTest {
         }
     }
 
-    protected ClassOrInterfaceDeclaration getInterfaceByName(String interfaceName) {
+    protected ClassOrInterfaceDeclaration getClassOrInterfaceByName(String classOrInterfaceName) {
         List<ClassOrInterfaceDeclaration> matchingInterfaces =
                 filter(compilationUnit.getTypes().get(0).getMembers(), ClassOrInterfaceDeclaration.class)
-                        .filter(i -> interfaceName.equals(i.getName()))
+                        .filter(i -> classOrInterfaceName.equals(i.getName()))
                         .collect(Collectors.toList());
 
-        assertThat(matchingInterfaces).hasSize(1);
+        assertThat(matchingInterfaces)
+                .describedAs("Class or interface '%s' not found", classOrInterfaceName)
+                .hasSize(1);
         return matchingInterfaces.get(0);
     }
 
-    protected MethodDeclaration getMethodByName(ClassOrInterfaceDeclaration classOrInterface,
-                                                          String methodName) {
+    protected MethodDeclaration getMethodByName(String methodName) {
+        return getMethodByName(compilationUnit.getTypes().get(0), methodName);
+    }
+
+    protected MethodDeclaration getMethodByName(TypeDeclaration classOrInterface,
+                                                String methodName) {
         List<MethodDeclaration> matchingMethods =
                 filter(classOrInterface.getMembers(), MethodDeclaration.class)
                         .filter(i -> methodName.equals(i.getName()))
                         .collect(Collectors.toList());
 
-        assertThat(matchingMethods).hasSize(1);
+        assertThat(matchingMethods)
+                .describedAs("Method '%s' not found under '%s'", methodName, classOrInterface.getName())
+                .hasSize(1);
         return matchingMethods.get(0);
     }
 }

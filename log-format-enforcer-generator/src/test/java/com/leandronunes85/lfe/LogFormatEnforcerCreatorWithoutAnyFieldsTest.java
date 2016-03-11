@@ -34,7 +34,7 @@ public class LogFormatEnforcerCreatorWithoutAnyFieldsTest extends AbstractTest {
 
     @Test
     public void createsActualBuilderThatImplementsOnlyTheLastInterface() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ActualBuilder");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ActualBuilder");
         Stream<String> implementationNames = classOrInterface.getImplements().stream().map(ClassOrInterfaceType::getName);
 
         assertThat(implementationNames).containsExactly("MoreFields", "NoMoreFields");
@@ -42,7 +42,7 @@ public class LogFormatEnforcerCreatorWithoutAnyFieldsTest extends AbstractTest {
 
     @Test
     public void buildItInterfaceReceivesAndReturnsLastInterface () {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("ToBuild");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ToBuild");
         MethodDeclaration methodDeclaration = getMethodByName(classOrInterface, "buildIt");
 
         assertThat(methodDeclaration.getDeclarationAsString(true, true, false))

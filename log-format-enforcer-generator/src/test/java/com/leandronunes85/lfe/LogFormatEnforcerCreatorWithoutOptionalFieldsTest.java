@@ -37,7 +37,7 @@ public class LogFormatEnforcerCreatorWithoutOptionalFieldsTest extends AbstractT
 
     @Test
     public void createsInterfaceForLastMandatoryField() {
-        ClassOrInterfaceDeclaration classOrInterface = getInterfaceByName("MandatoryField3");
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField3");
         MethodDeclaration method = getMethodByName(classOrInterface, "mandatoryField3");
 
         assertThat(classOrInterface.getExtends()).isNullOrEmpty();
