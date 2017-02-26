@@ -76,7 +76,7 @@ public class LogFormatEnforcerCreator {
     }
 
     private List<ExpandedFieldInfo> getExpandedFieldInfos(List<FieldInfo> withMandatoryFields, String pairForLastElement) {
-        return pairingWithNextElement(withMandatoryFields, pairForLastElement, fieldInfo -> fieldInfo.getFieldName())
+        return pairingWithNextElement(withMandatoryFields, pairForLastElement, FieldInfo::getFieldName)
                 .map(ExpandedFieldInfo::from)
                 .collect(toList());
     }

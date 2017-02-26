@@ -7,7 +7,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AbstractTest {
 
-    private static final <T> Stream<T> filter(Collection<?> collection, Class<T> clazz) {
+    private static <T> Stream<T> filter(Collection<?> collection, Class<T> clazz) {
         return collection.stream()
                 .filter(clazz::isInstance)
                 .map(clazz::cast);

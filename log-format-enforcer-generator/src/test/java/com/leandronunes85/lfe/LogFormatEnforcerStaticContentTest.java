@@ -4,7 +4,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.util.Collections.EMPTY_LIST;
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogFormatEnforcerStaticContentTest extends AbstractTest {
@@ -13,7 +14,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
     @Before
     public void setUp() throws Exception {
         createFile(EXPECTED_PACKAGE_NAME,
-                EMPTY_LIST,
+                Collections.emptyList(),
                 "entrySeparator",
                 "valueDelimiterPrefix",
                 "valueDelimiterSuffix",
