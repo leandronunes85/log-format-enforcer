@@ -1,20 +1,24 @@
 package com.leandronunes85.lfe;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
+import java.util.List;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LogFormatEnforcerStaticContentTest extends AbstractTest {
+
     private static final String EXPECTED_PACKAGE_NAME = "expected.name";
 
     @Before
     public void setUp() throws Exception {
         createFile(EXPECTED_PACKAGE_NAME,
-                Collections.emptyList(),
+                singletonList(FieldInfo.mandatory("mandatoryField1", "mandatoryField1Text")),
                 "entrySeparator",
                 "valueDelimiterPrefix",
                 "valueDelimiterSuffix",
@@ -65,6 +69,16 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
 
         assertThat(method.getDeclarationAsString(true, true, false))
                 .isEqualTo("public void trace(ToBuild)");
+    }
+
+    @Test
+    public void mandatoryField1InterfaceContainsSetterForSupplierOfMandatoryField1() {
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField1");
+        List<String> methods = getAllMethodsByName(classOrInterface, "mandatoryField1").stream()
+                .map(m -> m.getDeclarationAsString(true, true, false))
+                .collect(toList());
+
+        assertThat(methods).containsOnlyOnce("MoreFields mandatoryField1(Supplier<Object>)");
     }
 
 }

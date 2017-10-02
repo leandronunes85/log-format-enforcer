@@ -60,19 +60,24 @@ public class AbstractTest {
     }
 
     protected MethodDeclaration getMethodByName(String methodName) {
-        return getMethodByName(compilationUnit.getTypes().get(0), methodName);
+        return getFirstMethodByName(compilationUnit.getTypes().get(0), methodName);
     }
 
-    protected MethodDeclaration getMethodByName(TypeDeclaration classOrInterface,
-                                                String methodName) {
+    protected MethodDeclaration getFirstMethodByName(TypeDeclaration classOrInterface,
+                                                     String methodName) {
         List<MethodDeclaration> matchingMethods =
-                filter(classOrInterface.getMembers(), MethodDeclaration.class)
-                        .filter(i -> methodName.equals(i.getName()))
-                        .collect(Collectors.toList());
+                getAllMethodsByName(classOrInterface, methodName);
 
-        assertThat(matchingMethods)
+        assertThat(matchingMethods.size())
                 .describedAs("Method '%s' not found under '%s'", methodName, classOrInterface.getName())
-                .hasSize(1);
+                .isGreaterThan(0);
         return matchingMethods.get(0);
+    }
+
+    protected List<MethodDeclaration> getAllMethodsByName(TypeDeclaration classOrInterface,
+                                                          String methodName) {
+        return filter(classOrInterface.getMembers(), MethodDeclaration.class)
+                .filter(i -> methodName.equals(i.getName()))
+                .collect(Collectors.toList());
     }
 }
