@@ -44,36 +44,36 @@ public class LogFormatEnforcer {
         this.logLookup.put(Level.TRACE, logger::trace);
     }
 
-    public void error(ToBuild willBuild) {
-        log(Level.ERROR, willBuild);
+    public void error(MessageBuilder messageBuilder) {
+        log(Level.ERROR, messageBuilder);
     }
 
-    public void warn(ToBuild willBuild) {
-        log(Level.WARN, willBuild);
+    public void warn(MessageBuilder messageBuilder) {
+        log(Level.WARN, messageBuilder);
     }
 
-    public void info(ToBuild willBuild) {
-        log(Level.INFO, willBuild);
+    public void info(MessageBuilder messageBuilder) {
+        log(Level.INFO, messageBuilder);
     }
 
-    public void debug(ToBuild willBuild) {
-        log(Level.DEBUG, willBuild);
+    public void debug(MessageBuilder messageBuilder) {
+        log(Level.DEBUG, messageBuilder);
     }
 
-    public void trace(ToBuild willBuild) {
-        log(Level.TRACE, willBuild);
+    public void trace(MessageBuilder messageBuilder) {
+        log(Level.TRACE, messageBuilder);
     }
 
-    private void log(Level level, ToBuild willBuild) {
+    private void log(Level level, MessageBuilder messageBuilder) {
         if (this.logEnabledLookup.get(level).getAsBoolean()) {
             ActualBuilder builder = new ActualBuilder();
-            willBuild.buildIt(builder);
+            messageBuilder.build(builder);
             this.logLookup.get(level).accept(builder.getMessage(), builder.getArguments());
         }
     }
 
-    public interface ToBuild {
-        NoMoreFields buildIt(<builderEntryPoint> builder);
+    public interface MessageBuilder {
+        NoMoreFields build(<builderEntryPoint> builder);
     }
 
     <expandedFieldInfos:interface(); separator="\n\n">

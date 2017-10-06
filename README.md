@@ -24,11 +24,11 @@ All these are problems that this library tries to address.
 ```java
 private static final Logger log = LoggerFactory.getLogger(MyClass.class); // or something similar
 ...
-log.info("op=someMethod, msg='This is a message', someValue='{}'", someValue);
+log.info("op='someMethod', msg='This is a message', someValue='{}'", someValue);
 ...
-log.trace("op=otherMethod, msg='Other message', input='{}', output='{}'", input, output);
+log.trace("op='otherMethod', msg='Other message', input='{}', output='{}'", input, output);
 ...
-log.warn("op=otherMethod, msg='Something bad happened', input='{}', output='{}'", input, output, exception);
+log.warn("op='otherMethod', msg='Something bad happened', input='{}', output='{}'", input, output, exception);
 ...
 ```
 This is an actual example of some messages a team where I worked before agreed upon: 'msg' and 'op' would always be 
@@ -43,11 +43,11 @@ In your class:
 ```java
 private static final LogFormatEnforcer log = LogFormatEnforcer.loggerFor(MyClass.class); 
 ...
-log.info(logMessage -> logMessage.op("someMethod").msg("This is a message").and("someValue", someValue));
+log.info(messageBuilder -> messageBuilder.op("someMethod").msg("This is a message").and("someValue", someValue));
 ...
-log.trace(logMessage -> logMessage.op("otherMethod").msg("Other message").input(input).output(output));
+log.trace(messageBuilder -> messageBuilder.op("otherMethod").msg("Other message").input(input).output(output));
 ...
-log.warn(logMessage -> logMessage.op("otherMethod").msg("Something bad happened").input(input).output(output).exception(exception));
+log.warn(messageBuilder -> messageBuilder.op("otherMethod").msg("Something bad happened").input(input).output(output).exception(exception));
 ...
 ```
 And I dare you trying to break the agreed rules now. 
@@ -118,5 +118,4 @@ Rebuild it, release it and that's it!
 
 
 ## Wrap up
-As I said, this is still a prototype, there's still bugs that I'm aware of and many other that I'm not, for sure. 
 Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!

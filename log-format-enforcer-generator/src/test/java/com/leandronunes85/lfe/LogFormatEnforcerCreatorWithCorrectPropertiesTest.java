@@ -218,11 +218,11 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
     }
 
     @Test
-    public void toBuildInterfaceContainsCorrectEntryPoint() {
-        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ToBuild");
-        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "buildIt");
+    public void messageBuilderInterfaceContainsCorrectEntryPoint() {
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MessageBuilder");
+        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "build");
 
         assertThat(methodDeclaration.getDeclarationAsString(true, true, false))
-                .isEqualTo("NoMoreFields buildIt(MandatoryField1)");
+                .isEqualTo("NoMoreFields build(MandatoryField1)");
     }
 }

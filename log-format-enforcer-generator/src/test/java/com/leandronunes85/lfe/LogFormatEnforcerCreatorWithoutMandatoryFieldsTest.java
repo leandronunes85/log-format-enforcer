@@ -37,12 +37,12 @@ public class LogFormatEnforcerCreatorWithoutMandatoryFieldsTest extends Abstract
     }
 
     @Test
-    public void toBuildInterfaceHasCorrectEntryPoint() {
-        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ToBuild");
-        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "buildIt");
+    public void messageBuilderInterfaceHasCorrectEntryPoint() {
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MessageBuilder");
+        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "build");
 
         assertThat(methodDeclaration.getDeclarationAsString(true, true, false))
-                .isEqualTo("NoMoreFields buildIt(OptionalField1)");
+                .isEqualTo("NoMoreFields build(OptionalField1)");
     }
 
 }

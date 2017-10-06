@@ -41,11 +41,11 @@ public class LogFormatEnforcerCreatorWithoutAnyFieldsTest extends AbstractTest {
     }
 
     @Test
-    public void buildItInterfaceReceivesAndReturnsLastInterface () {
-        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("ToBuild");
-        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "buildIt");
+    public void messageBuilderInterfaceReceivesAndReturnsLastInterface () {
+        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MessageBuilder");
+        MethodDeclaration methodDeclaration = getFirstMethodByName(classOrInterface, "build");
 
         assertThat(methodDeclaration.getDeclarationAsString(true, true, false))
-                .isEqualTo("NoMoreFields buildIt(MoreFields)");
+                .isEqualTo("NoMoreFields build(MoreFields)");
     }
 }

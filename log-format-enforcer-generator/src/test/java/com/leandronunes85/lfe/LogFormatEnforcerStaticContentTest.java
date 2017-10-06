@@ -36,7 +36,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
         MethodDeclaration method = getMethodByName("error");
 
         assertThat(method.getDeclarationAsString(true, true, false))
-                .isEqualTo("public void error(ToBuild)");
+                .isEqualTo("public void error(MessageBuilder)");
     }
 
     @Test
@@ -44,7 +44,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
         MethodDeclaration method = getMethodByName("warn");
 
         assertThat(method.getDeclarationAsString(true, true, false))
-                .isEqualTo("public void warn(ToBuild)");
+                .isEqualTo("public void warn(MessageBuilder)");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
         MethodDeclaration method = getMethodByName("info");
 
         assertThat(method.getDeclarationAsString(true, true, false))
-                .isEqualTo("public void info(ToBuild)");
+                .isEqualTo("public void info(MessageBuilder)");
     }
 
     @Test
@@ -60,7 +60,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
         MethodDeclaration method = getMethodByName("debug");
 
         assertThat(method.getDeclarationAsString(true, true, false))
-                .isEqualTo("public void debug(ToBuild)");
+                .isEqualTo("public void debug(MessageBuilder)");
     }
 
     @Test
@@ -68,7 +68,7 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
         MethodDeclaration method = getMethodByName("trace");
 
         assertThat(method.getDeclarationAsString(true, true, false))
-                .isEqualTo("public void trace(ToBuild)");
+                .isEqualTo("public void trace(MessageBuilder)");
     }
 
     @Test
