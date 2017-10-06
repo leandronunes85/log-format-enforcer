@@ -53,7 +53,8 @@ log.trace(messageBuilder -> messageBuilder.op("otherMethod").msg("Other message"
 ...
 log.warn(messageBuilder -> messageBuilder.op("otherMethod").msg("Something bad happened").input(input).output(output).exception(exception));
 ...
-log.debug(messageBuilder -> messageBuilder.op"otherMethod").msg("Something costly will be logged").and("heavyObject", this::computeHeavyObject); // Will be released in version 1.2
+// Will be released in version 1.2
+log.debug(messageBuilder -> messageBuilder.op"otherMethod").msg("Something costly will be logged").and("heavyObject", this::computeHeavyObject); 
 ...
 ```
 And I dare you trying to break the agreed rules now. 
