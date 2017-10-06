@@ -30,6 +30,10 @@ log.trace("op='otherMethod', msg='Other message', input='{}', output='{}'", inpu
 ...
 log.warn("op='otherMethod', msg='Something bad happened', input='{}', output='{}'", input, output, exception);
 ...
+if (log.isDebugEnabled()) {
+    log.debug("op='otherMethod', msg='Something costly will be logged', heavyObject='{}'", this.computeHeavyObject());
+}
+...
 ```
 This is an actual example of some messages a team where I worked before agreed upon: 'msg' and 'op' would always be 
 present. For some cases (typically trace messages) we would log 'input' and 'output'. Every message could have any 
@@ -48,6 +52,8 @@ log.info(messageBuilder -> messageBuilder.op("someMethod").msg("This is a messag
 log.trace(messageBuilder -> messageBuilder.op("otherMethod").msg("Other message").input(input).output(output));
 ...
 log.warn(messageBuilder -> messageBuilder.op("otherMethod").msg("Something bad happened").input(input).output(output).exception(exception));
+...
+log.debug(messageBuilder -> messageBuilder.op"otherMethod").msg("Something costly will be logged").and("heavyObject", this::computeHeavyObject); // Will be released in version 1.2
 ...
 ```
 And I dare you trying to break the agreed rules now. 
