@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.leandronunes85.lfe</groupId>
         <artifactId>log-format-enforcer</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
@@ -18,7 +18,7 @@
         <maven-plugin-api.version>3.0</maven-plugin-api.version>
         <maven-core.version>3.0</maven-core.version>
         <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
-        <log-format-enforcer-generator.version>1.2-SNAPSHOT</log-format-enforcer-generator.version>
+        <log-format-enforcer-generator.version>1.3-SNAPSHOT</log-format-enforcer-generator.version>
     </properties>
 
     <dependencies>
