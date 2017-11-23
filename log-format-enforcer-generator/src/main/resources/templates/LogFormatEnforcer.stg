@@ -81,6 +81,10 @@ public class LogFormatEnforcer {
     public interface MoreFields extends NoMoreFields {
         MoreFields and(String name, Object value);
 
+        default MoreFields and(String name, Supplier\<Object\> valueSupplier) {
+            return and(name, valueSupplier.get());
+        }
+
         NoMoreFields exception(Throwable value);
     }
 
