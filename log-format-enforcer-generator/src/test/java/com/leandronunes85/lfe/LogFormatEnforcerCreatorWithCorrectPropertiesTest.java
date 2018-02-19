@@ -6,6 +6,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -126,6 +127,13 @@ public class LogFormatEnforcerCreatorWithCorrectPropertiesTest extends AbstractT
 
         assertThat(implementationNames).containsExactly("MandatoryField1", "MandatoryField2", "MandatoryField3",
                 "OptionalField1", "OptionalField2", "OptionalField3", "MoreFields", "NoMoreFields");
+    }
+
+    @Test
+    public void createsActualBuilderClassThatIsStatic() {
+        int modifiers = getClassOrInterfaceByName("ActualBuilder").getModifiers();
+
+        assertThat(Modifier.isStatic(modifiers)).isTrue();
     }
 
     @Test

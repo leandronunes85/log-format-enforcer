@@ -91,7 +91,7 @@ public class LogFormatEnforcer {
     public interface NoMoreFields {
     }
 
-    private class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif>MoreFields, NoMoreFields {
+    private static class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif>MoreFields, NoMoreFields {
 
         private final ArrayList\<String\> messages = new ArrayList\<\>();
         private final ArrayList\<Object\> values = new ArrayList\<\>();
