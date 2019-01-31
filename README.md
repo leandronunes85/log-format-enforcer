@@ -65,7 +65,7 @@ In the pom.xml:
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.1</version>
+    <version>1.3</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
@@ -92,7 +92,7 @@ separate keys and values (because you fancy Java 8)? Just update your pom, like 
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.1</version>
+    <version>1.4</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>

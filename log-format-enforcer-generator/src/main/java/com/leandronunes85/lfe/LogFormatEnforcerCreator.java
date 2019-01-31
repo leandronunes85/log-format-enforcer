@@ -1,7 +1,5 @@
 package com.leandronunes85.lfe;
 
-import org.stringtemplate.v4.STGroupFile;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,10 +15,9 @@ public class LogFormatEnforcerCreator {
 
     private static final Pattern PACKAGE_PATTERN = compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*");
     private static final String LAST_INTERFACE_NAME = "MoreFields";
-    private static final STGroupFile TEMPLATE = new STGroupFile("templates/LogFormatEnforcer.stg");
 
-
-    public String createALogFormatEnforcer(String withPackageName,
+    public String createALogFormatEnforcer(Language forLanguage,
+                                           String withPackageName,
                                            List<FieldInfo> withFields,
                                            String withEntrySeparator,
                                            String withValueDelimiterPrefix,
@@ -30,13 +27,13 @@ public class LogFormatEnforcerCreator {
         checkArguments(withPackageName, withFields, withEntrySeparator,
                 withValueDelimiterPrefix, withValueDelimiterSuffix, withKeyValueSeparator);
 
-
         List<ExpandedFieldInfo> expandedFieldInfos = getExpandedFieldInfos(withFields, LAST_INTERFACE_NAME);
 
         String builderEntryPoint = !expandedFieldInfos.isEmpty() ?
                 expandedFieldInfos.get(0).getInterfaceName() : LAST_INTERFACE_NAME;
 
-        return TEMPLATE.getInstanceOf("logFormatEnforcer")
+        return forLanguage.getTemplate()
+                .getInstanceOf("logFormatEnforcer")
                 .add("package", withPackageName)
                 .add("expandedFieldInfos", expandedFieldInfos)
                 .add("entrySeparator", sanitizeIt(withEntrySeparator))

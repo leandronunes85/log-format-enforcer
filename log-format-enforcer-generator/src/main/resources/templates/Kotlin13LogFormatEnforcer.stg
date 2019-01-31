@@ -1,0 +1,182 @@
+logFormatEnforcer(package,
+                    expandedFieldInfos,
+                    entrySeparator,
+                    valueDelimiterPrefix,
+                    valueDelimiterSuffix,
+                    keyValueSeparator,
+                    builderEntryPoint) ::= <<
+package <package>
+
+import org.slf4j.LoggerFactory
+import org.slf4j.event.Level
+import kotlin.reflect.KClass
+
+class LogFormatEnforcer private constructor(logName: String) {
+
+    companion object {
+        inline fun \<reified T\> loggerFor(): LogFormatEnforcer = loggerFor(T::class.java.name)
+        fun loggerFor(name: String): LogFormatEnforcer = LogFormatEnforcer(name)
+    }
+
+    private val logEnabledLookup: Map\<Level, () -\> Boolean\>
+    private val logLookup: Map\<Level, (String, Array\<Any?\>) -> Unit\>
+
+    init {
+        val logger = LoggerFactory.getLogger(logName)
+
+        this.logEnabledLookup = mapOf(
+                Level.ERROR to logger::isErrorEnabled,
+                Level.WARN to logger::isWarnEnabled,
+                Level.INFO to logger::isInfoEnabled,
+                Level.DEBUG to logger::isDebugEnabled,
+                Level.TRACE to logger::isTraceEnabled
+        )
+
+        this.logLookup = mapOf(
+                Level.ERROR to { message, objects -\> logger.error(message, *objects) },
+                Level.WARN to { message, objects -\> logger.warn(message, *objects) },
+                Level.INFO to { message, objects -\> logger.info(message, *objects) },
+                Level.DEBUG to { message, objects -\> logger.debug(message, *objects) },
+                Level.TRACE to { message, objects -\> logger.trace(message, *objects) }
+        )
+    }
+
+    fun error(messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        log(Level.ERROR, messageBuilder)
+    }
+
+    fun warn(messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        log(Level.WARN, messageBuilder)
+    }
+
+    fun info(messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        log(Level.INFO, messageBuilder)
+    }
+
+    fun debug(messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        log(Level.DEBUG, messageBuilder)
+    }
+
+    fun trace(messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        log(Level.TRACE, messageBuilder)
+    }
+
+    private fun log(level: Level, messageBuilder: <builderEntryPoint>.() -\> NoMoreFields) {
+        if (this.logEnabledLookup[level]?.invoke() == true) {
+            val builder = ActualBuilder().messageBuilder()
+            this.logLookup[level]?.invoke(builder.message(), builder.arguments())
+        }
+    }
+
+    <expandedFieldInfos:interface(); separator="\n\n">
+
+    interface MoreFields : NoMoreFields {
+        fun and(name: String, value: Any?): MoreFields
+
+        fun and(name: String, valueSupplier: () -\> Any?): MoreFields {
+            return and(name, valueSupplier())
+        }
+
+        fun exception(value: Throwable): NoMoreFields
+    }
+
+    interface NoMoreFields {
+        fun message(): String
+
+        fun arguments(): Array\<Any?\>
+    }
+
+    private class ActualBuilder : <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif>MoreFields, NoMoreFields {
+
+        private val messages = mutableListOf\<String\>()
+        private val values = mutableListOf\<Any?\>()
+
+        <expandedFieldInfos:actualBuilderMethod();separator="\n\n">
+
+        override fun and(name: String, value: Any?): MoreFields = newField(name, value)
+
+        override fun exception(value: Throwable): NoMoreFields {
+            this.values += value
+            return this
+        }
+
+        override fun message(): String = messages.joinToString(separator = "<entrySeparator>")
+
+        override fun arguments(): Array\<Any?\> = values.toTypedArray()
+
+        private fun newField(name: String, value: Any?): ActualBuilder {
+            this.messages += "$name<keyValueSeparator><valueDelimiterPrefix>{}<valueDelimiterSuffix>"
+            this.values += value
+            return this
+        }
+    }
+}
+
+
+fun <T> T.debug(
+    logger: LogFormatEnforcer,
+    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
+): T = apply {
+    logger.debug { block(this@apply) }
+}
+
+fun CharSequence.debugEach(
+    logger: LogFormatEnforcer,
+    block: LogFormatEnforcer.Op.(Char) -> LogFormatEnforcer.NoMoreFields
+): CharSequence {
+    this.forEach {
+        logger.debug { block(it) }
+    }
+    return this
+}
+
+fun <T> Array<T>.debugEach(
+    logger: LogFormatEnforcer,
+    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
+): Array<T> {
+    this.forEach {
+        logger.debug { block(it) }
+    }
+    return this
+}
+
+fun <T> Sequence<T>.debugEach(
+    logger: LogFormatEnforcer,
+    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
+): Sequence<T> = PeekingSequence(this) { logger.debug { block(it) } }
+
+fun <T> Iterable<T>.debugEach(
+    logger: LogFormatEnforcer,
+    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
+): Iterable<T> {
+    this.forEach {
+        logger.debug { block(it) }
+    }
+    return this
+}
+
+private class PeekingSequence<T>(sequence: Sequence<T>, private val block: (T) -> Unit) : Sequence<T> {
+
+    private val iterator = sequence.iterator()
+    override fun iterator(): Iterator<T> = object : Iterator<T> {
+        override fun next(): T = iterator.next().also(block)
+
+        override fun hasNext(): Boolean = iterator.hasNext()
+    }
+
+}
+
+>>
+
+interface(expandedFieldInfo) ::= <<
+interface <expandedFieldInfo.interfaceName><if(expandedFieldInfo.optional)> : <expandedFieldInfo.returnType><endif> {
+    fun <expandedFieldInfo.fieldName>(value: Any?): <expandedFieldInfo.returnType>
+
+    fun <expandedFieldInfo.fieldName>(valueSupplier: () -\> Any?): <expandedFieldInfo.returnType> =
+        <expandedFieldInfo.fieldName>(valueSupplier())
+}
+>>
+
+actualBuilderMethod(expandedFieldInfo) ::= <<
+override fun <expandedFieldInfo.fieldName>(value: Any?): <expandedFieldInfo.returnType> = newField("<expandedFieldInfo.fieldText>", value)
+>>

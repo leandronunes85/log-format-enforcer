@@ -1,6 +1,7 @@
 package com.leandronunes85.lfe.maven_plugin;
 
 import com.leandronunes85.lfe.FieldInfo;
+import com.leandronunes85.lfe.Language;
 import com.leandronunes85.lfe.LogFormatEnforcerCreator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -19,11 +20,8 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
@@ -31,7 +29,7 @@ import static java.util.stream.Stream.concat;
 @Mojo(name = "create", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class LogFormatEnforcerMojo extends AbstractMojo {
 
-    private static final String FILE_NAME = "LogFormatEnforcer.java";
+    private static final String FILE_NAME = "LogFormatEnforcer";
 
     private final LogFormatEnforcerCreator lfeCreator = new LogFormatEnforcerCreator();
 
@@ -43,6 +41,9 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
 
     @Parameter
     private LinkedHashMap<String, String> optionalFields = new LinkedHashMap<>();
+
+    @Parameter(defaultValue = "java-8")
+    private String language;
 
     @Parameter(required = true)
     private String packageName;
@@ -59,18 +60,22 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     @Parameter(defaultValue = "=")
     private String keyValueSeparator;
 
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/log-format-enforcer/", required = true)
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/log-format-enforcer/", required = true, readonly = true)
     private File outputDirectory;
+
+    private Language languageEnum;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         logParameters();
+
+        this.languageEnum = Language.from(language);
 
         try {
             Path pathToWrite = findWhereToWrite();
             getLog().info("Writing " + pathToWrite.toString());
             String logFormatEnforcerContents = generateClass();
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
-            project.addCompileSourceRoot(outputDirectory.getPath());
+            project.addCompileSourceRoot(languageEnum.outputDir(outputDirectory));
             getLog().info("File successfully written");
         } catch (IOException e) {
             throw new MojoExecutionException("Error writing " + FILE_NAME, e);
@@ -79,6 +84,7 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
 
     private String generateClass() {
         String logFormatEnforcerContents = lfeCreator.createALogFormatEnforcer(
+                languageEnum,
                 packageName,
                 getFieldInfoList(),
                 entrySeparator,
@@ -101,28 +107,30 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     }
 
     private Path findWhereToWrite() throws IOException {
-        Path path = Paths
-                .get(outputDirectory.getAbsolutePath(), packageName.split("\\."));
+        Path path = Paths.get(languageEnum.outputDir(outputDirectory), packageName.split("\\."));
         Files.createDirectories(path);
-        return path.resolve(FILE_NAME);
+        return path.resolve(FILE_NAME + languageEnum.getFileExtension());
     }
 
     private void logParameters() {
         Log log = getLog();
 
-        log.debug("mandatoryFields:");
-        for (Map.Entry<String, String> field : mandatoryFields.entrySet()) {
-            log.debug(format("\t\"%s\" -> \"%s\"", field.getKey(), field.getValue()));
+        if (log.isDebugEnabled()) {
+            log.debug("mandatoryFields:");
+            for (Map.Entry<String, String> field : mandatoryFields.entrySet()) {
+                log.debug(format("\t\"%s\" -> \"%s\"", field.getKey(), field.getValue()));
+            }
+            log.debug("optionalFields:");
+            for (Map.Entry<String, String> field : optionalFields.entrySet()) {
+                log.debug(format("\t\"%s\" -> \"%s\"", field.getKey(), field.getValue()));
+            }
+            log.debug(format("language -> \"%s\"", language));
+            log.debug(format("packageName -> \"%s\"", packageName));
+            log.debug(format("entrySeparator -> \"%s\"", entrySeparator));
+            log.debug(format("valueDelimiterPrefix -> \"%s\"", valueDelimiterPrefix));
+            log.debug(format("valueDelimiterSuffix -> \"%s\"", valueDelimiterSuffix));
+            log.debug(format("keyValueSeparator -> \"%s\"", keyValueSeparator));
+            log.debug(format("outputDirectory -> \"%s\"", outputDirectory));
         }
-        log.debug("optionalFields:");
-        for (Map.Entry<String, String> field : optionalFields.entrySet()) {
-            log.debug(format("\t\"%s\" -> \"%s\"", field.getKey(), field.getValue()));
-        }
-        log.debug(format("packageName -> \"%s\"", packageName));
-        log.debug(format("entrySeparator -> \"%s\"", entrySeparator));
-        log.debug(format("valueDelimiterPrefix -> \"%s\"", valueDelimiterPrefix));
-        log.debug(format("valueDelimiterSuffix -> \"%s\"", valueDelimiterSuffix));
-        log.debug(format("keyValueSeparator -> \"%s\"", keyValueSeparator));
-        log.debug(format("outputDirectory -> \"%s\"", outputDirectory));
     }
 }

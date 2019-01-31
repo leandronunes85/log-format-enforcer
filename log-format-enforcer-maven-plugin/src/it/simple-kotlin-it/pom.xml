@@ -38,6 +38,7 @@
                 <version>@project.version@</version>
                 <configuration>
                     <packageName>com.leandronunes85.log_format_enforcer.simple.it</packageName>
+                    <language>kotlin-1.3</language>
                     <mandatoryFields>
                         <mandatory1/>
                         <mandatory2/>

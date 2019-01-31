@@ -127,10 +127,10 @@ public class LogFormatEnforcer {
 
 interface(expandedFieldInfo) ::= <<
 public interface <expandedFieldInfo.interfaceName> <if(expandedFieldInfo.optional)>extends <expandedFieldInfo.returnType> <endif>{
-    <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Object <expandedFieldInfo.fieldName>);
+    <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Object value);
 
-    default <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Supplier\<Object\> <expandedFieldInfo.fieldName>Supplier) {
-        return <expandedFieldInfo.fieldName>(<expandedFieldInfo.fieldName>Supplier.get());
+    default <expandedFieldInfo.returnType> <expandedFieldInfo.fieldName>(Supplier\<Object\> valueSupplier) {
+        return <expandedFieldInfo.fieldName>(valueSupplier.get());
     }
 }
 >>

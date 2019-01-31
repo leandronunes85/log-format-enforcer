@@ -34,6 +34,7 @@ public class AbstractTest {
                               String withKeyValueSeparator) throws Exception {
 
         String fileContents = victim.createALogFormatEnforcer(
+                Language.JAVA8,
                 withPackageName,
                 withFields,
                 withEntrySeparator,
