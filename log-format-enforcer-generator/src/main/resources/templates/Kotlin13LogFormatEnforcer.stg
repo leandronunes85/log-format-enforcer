@@ -9,7 +9,6 @@ package <package>
 
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
-import kotlin.reflect.KClass
 
 class LogFormatEnforcer private constructor(logName: String) {
 
