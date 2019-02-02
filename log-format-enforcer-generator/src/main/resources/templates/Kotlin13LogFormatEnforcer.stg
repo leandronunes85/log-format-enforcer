@@ -19,7 +19,7 @@ class LogFormatEnforcer private constructor(logName: String) {
     }
 
     private val logEnabledLookup: Map\<Level, () -\> Boolean\>
-    private val logLookup: Map\<Level, (String, Array\<Any?\>) -> Unit\>
+    private val logLookup: Map\<Level, (String, Array\<Any?\>) -\> Unit\>
 
     init {
         val logger = LoggerFactory.getLogger(logName)
@@ -113,59 +113,187 @@ class LogFormatEnforcer private constructor(logName: String) {
 }
 
 
-fun <T> T.debug(
-    logger: LogFormatEnforcer,
-    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
-): T = apply {
-    logger.debug { block(this@apply) }
-}
+object LogFormatEnforcerExtensions {
+    fun \<T\> T.error(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.log(logger::error, block)
 
-fun CharSequence.debugEach(
-    logger: LogFormatEnforcer,
-    block: LogFormatEnforcer.Op.(Char) -> LogFormatEnforcer.NoMoreFields
-): CharSequence {
-    this.forEach {
-        logger.debug { block(it) }
-    }
-    return this
-}
+    fun \<T\> T.warn(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.log(logger::warn, block)
 
-fun <T> Array<T>.debugEach(
-    logger: LogFormatEnforcer,
-    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
-): Array<T> {
-    this.forEach {
-        logger.debug { block(it) }
-    }
-    return this
-}
+    fun \<T\> T.info(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.log(logger::info, block)
 
-fun <T> Sequence<T>.debugEach(
-    logger: LogFormatEnforcer,
-    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
-): Sequence<T> = PeekingSequence(this) { logger.debug { block(it) } }
+    fun \<T\> T.debug(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.log(logger::debug, block)
 
-fun <T> Iterable<T>.debugEach(
-    logger: LogFormatEnforcer,
-    block: LogFormatEnforcer.Op.(T) -> LogFormatEnforcer.NoMoreFields
-): Iterable<T> {
-    this.forEach {
-        logger.debug { block(it) }
-    }
-    return this
-}
+    fun \<T\> T.trace(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.log(logger::trace, block)
 
-private class PeekingSequence<T>(sequence: Sequence<T>, private val block: (T) -> Unit) : Sequence<T> {
-
-    private val iterator = sequence.iterator()
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
-        override fun next(): T = iterator.next().also(block)
-
-        override fun hasNext(): Boolean = iterator.hasNext()
+    private inline fun \<T\> T.log(
+        logWithLevel: (LogFormatEnforcer.<builderEntryPoint>.() -\> LogFormatEnforcer.NoMoreFields) -\> Unit,
+        crossinline block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): T = apply {
+        logWithLevel { block(this@apply) }
     }
 
-}
+    fun \<T : CharSequence\> T.errorEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.logEach(logger::error, block)
 
+    fun \<T : CharSequence\> T.warnEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.logEach(logger::warn, block)
+
+    fun \<T : CharSequence\> T.infoEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.logEach(logger::info, block)
+
+    fun \<T : CharSequence\> T.debugEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.logEach(logger::debug, block)
+
+    fun \<T : CharSequence\> T.traceEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T = this.logEach(logger::trace, block)
+
+    private inline fun \<T : CharSequence\> T.logEach(
+        logWithLevel: (LogFormatEnforcer.<builderEntryPoint>.() -\> LogFormatEnforcer.NoMoreFields) -\> Unit,
+        crossinline block: LogFormatEnforcer.<builderEntryPoint>.(Char) -\> LogFormatEnforcer.NoMoreFields
+    ): T {
+        this.forEach {
+            logWithLevel { block(it) }
+        }
+        return this
+    }
+
+
+    fun \<T\> Array\<T\>.errorEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> = this.logEach(logger::error, block)
+
+    fun \<T\> Array\<T\>.warnEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> = this.logEach(logger::warn, block)
+
+    fun \<T\> Array\<T\>.infoEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> = this.logEach(logger::info, block)
+
+    fun \<T\> Array\<T\>.debugEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> = this.logEach(logger::debug, block)
+
+    fun \<T\> Array\<T\>.traceEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> = this.logEach(logger::trace, block)
+
+    private inline fun \<T\> Array\<T\>.logEach(
+        logWithLevel: (LogFormatEnforcer.<builderEntryPoint>.() -\> LogFormatEnforcer.NoMoreFields) -\> Unit,
+        crossinline block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Array\<T\> {
+        this.forEach {
+            logWithLevel { block(it) }
+        }
+        return this
+    }
+
+    fun \<T\> Sequence\<T\>.errorEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = this.logEach(logger::error, block)
+
+    fun \<T\> Sequence\<T\>.warnEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = this.logEach(logger::warn, block)
+
+    fun \<T\> Sequence\<T\>.infoEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = this.logEach(logger::info, block)
+
+    fun \<T\> Sequence\<T\>.debugEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = this.logEach(logger::debug, block)
+
+    fun \<T\> Sequence\<T\>.traceEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = this.logEach(logger::trace, block)
+
+    private inline fun \<T\> Sequence\<T\>.logEach(
+        crossinline logWithLevel: (LogFormatEnforcer.<builderEntryPoint>.() -\> LogFormatEnforcer.NoMoreFields) -\> Unit,
+        crossinline block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Sequence\<T\> = PeekingSequence(this) { logWithLevel { block(it) } }
+
+    private class PeekingSequence\<T\>(sequence: Sequence\<T\>, private val block: (T) -\> Unit) : Sequence\<T\> {
+
+        private val iterator = sequence.iterator()
+
+        override fun iterator(): Iterator\<T\> = object : Iterator\<T\> {
+            override fun next(): T = iterator.next().also(block)
+
+            override fun hasNext(): Boolean = iterator.hasNext()
+        }
+    }
+
+
+    fun \<T\> Iterable\<T\>.errorEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> = this.logEach(logger::error, block)
+
+    fun \<T\> Iterable\<T\>.warnEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> = this.logEach(logger::warn, block)
+
+    fun \<T\> Iterable\<T\>.infoEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> = this.logEach(logger::info, block)
+
+    fun \<T\> Iterable\<T\>.debugEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> = this.logEach(logger::debug, block)
+
+    fun \<T\> Iterable\<T\>.traceEach(
+        logger: LogFormatEnforcer,
+        block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> = this.logEach(logger::trace, block)
+
+    private inline fun \<T\> Iterable\<T\>.logEach(
+        logWithLevel: (LogFormatEnforcer.<builderEntryPoint>.() -\> LogFormatEnforcer.NoMoreFields) -\> Unit,
+        crossinline block: LogFormatEnforcer.<builderEntryPoint>.(T) -\> LogFormatEnforcer.NoMoreFields
+    ): Iterable\<T\> {
+        this.forEach {
+            logWithLevel { block(it) }
+        }
+        return this
+    }
+}
 >>
 
 interface(expandedFieldInfo) ::= <<
