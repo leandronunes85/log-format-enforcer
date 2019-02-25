@@ -204,16 +204,45 @@ Rebuild it, release it and that's it!
 >already have that. 
 
 ## Configuration properties
-| Name                 | Type                                    | Mandatory                      |
-|----------------------|-----------------------------------------|--------------------------------|
-| packageName          | String                                  | True.                          |
-| language             | String. Either `java-8` or `kotlin-1.3` | False. Defaults to `java-8`.   |
-| mandatoryFields      | List of fields.                         | False. Defaults to empty list. |
-| optionalFields       | List of fields.                         | False. Defaults to empty list. |
-| entrySeparator       | String.                                 | False. Defaults to `, `.       |
-| valueDelimiterPrefix | String.                                 | False. Defaults to `'`.        |
-| valueDelimiterSuffix | String.                                 | False. Defaults to `'`.        |
-| keyValueSeparator    | String.                                 | False. Defaults to `=`.        |
+| Name                 | Type                                     | Mandatory                      |
+|----------------------|------------------------------------------|--------------------------------|
+| packageName          | String.                                  | True.                          |
+| language             | String. Either `java-8` or `kotlin-1.3`. | False. Defaults to `java-8`.   |
+| mandatoryFields      | List of fields.                          | False. Defaults to empty list. |
+| optionalFields       | List of fields.                          | False. Defaults to empty list. |
+| entrySeparator       | String.                                  | False. Defaults to `, `.       |
+| valueDelimiterPrefix | String.                                  | False. Defaults to `'`.        |
+| valueDelimiterSuffix | String.                                  | False. Defaults to `'`.        |
+| keyValueSeparator    | String.                                  | False. Defaults to `=`.        |
+
+### Field
+
+Both `mandatoryFields` and `optionalFields` take a list of Fields. A Field, in its simplest form can be described as:  
+```xml
+...
+    <fieldName />
+...
+```
+This will generate a method called `fieldName` that will log a value with the label "fieldName". Sometimes,
+however, one may want to have different values for the method name and the label of the field that actually gets logged. 
+This can be achieved by declaring such fields using this form instead: 
+```xml
+...
+    <methodName>logLabel</methodName>
+...
+```
+
+So, going back to our original example, one could have used: 
+```xml
+...
+        <mandatoryFields>
+            <operation>op</operation>
+            <message>msg</message>
+        </mandatoryFields>
+...
+```
+to have more meaningful code `log.info { operation("someMethod").message("some message that ...` while still complying with 
+the previously agreed message format.
 
 ## Wrap up
 Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!
