@@ -66,7 +66,7 @@ In the pom.xml:
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
@@ -88,7 +88,7 @@ In the pom.xml:
 </plugin>
 ```
 
-## Kotlin (SOON TO COME IN VERSION 1.4)
+## Kotlin
 More and more teams are migrating to Kotlin these days. Even though I still see many projects where there's a 
 mix of Kotlin and Java source code I noticed the number of Kotlin-only projects is growing. With this in mind we provided Kotlin 
 specific code generation so that you can use this library even if you project does not compile Java source code. 
@@ -98,7 +98,7 @@ This can be achieved by simply adding an optional configuration parameter 'langu
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <configuration>
         <packageName>com.leandronunes85.tests.kotlin</packageName>
         <language>kotlin-1.3</language>
@@ -172,7 +172,7 @@ separate keys and values (because you fancy lambdas)? Just update your pom, like
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
