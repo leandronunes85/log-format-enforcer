@@ -241,7 +241,7 @@ So, going back to our original example, one could have used:
         </mandatoryFields>
 ...
 ```
-to have more meaningful code `log.info { operation("someMethod").message("some message that ...` while still complying with 
+to have more meaningful code (`log.info { operation("someMethod").message("some message that ...`) while still complying with 
 the previously agreed message format.
 
 ## Wrap up
