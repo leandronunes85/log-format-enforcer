@@ -93,7 +93,7 @@ More and more teams are migrating to Kotlin these days. Even though I still see 
 mix of Kotlin and Java source code I noticed the number of Kotlin-only projects is growing. With this in mind we provided Kotlin 
 specific code generation so that you can use this library even if you project does not compile Java source code. 
 
-This can be achieved by simply adding an optional configuration parameter 'language' with the value "kotlin-1.3" like so:
+This can be achieved by simply adding an optional configuration parameter `language` with the value "kotlin-1.3" like so:
 ```xml
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
@@ -203,6 +203,17 @@ Rebuild it, release it and that's it!
 >project dependencies. Luckily if you're using a known logging library (which you should), chances are that you 
 >already have that. 
 
+## Configuration properties
+| Name                 | Type                                    | Mandatory                      |
+|----------------------|-----------------------------------------|--------------------------------|
+| packageName          | String                                  | True.                          |
+| language             | String. Either `java-8` or `kotlin-1.3` | False. Defaults to `java-8`.   |
+| mandatoryFields      | List of fields.                         | False. Defaults to empty list. |
+| optionalFields       | List of fields.                         | False. Defaults to empty list. |
+| entrySeparator       | String.                                 | False. Defaults to `, `.       |
+| valueDelimiterPrefix | String.                                 | False. Defaults to `'`.        |
+| valueDelimiterSuffix | String.                                 | False. Defaults to `'`.        |
+| keyValueSeparator    | String.                                 | False. Defaults to `=`.        |
 
 ## Wrap up
 Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!
