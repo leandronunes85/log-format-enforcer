@@ -75,8 +75,8 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
             getLog().info("Writing " + pathToWrite.toString());
             String logFormatEnforcerContents = generateClass();
             Files.write(pathToWrite, logFormatEnforcerContents.getBytes());
-            project.addCompileSourceRoot(languageEnum.outputDir(outputDirectory));
             getLog().info("File successfully written");
+            project.addCompileSourceRoot(languageEnum.outputDir(outputDirectory));
         } catch (IOException e) {
             throw new MojoExecutionException("Error writing " + FILE_NAME, e);
         }

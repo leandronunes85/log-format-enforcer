@@ -19,6 +19,19 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.16</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.15.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -37,17 +50,15 @@
                 <artifactId>@project.artifactId@</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                    <packageName>com.leandronunes85.log_format_enforcer.simple.it</packageName>
+                    <packageName>com.leandronunes85.lfe.maven_plugin.it.java</packageName>
                     <language>java-8</language>
                     <mandatoryFields>
                         <mandatory1/>
-                        <mandatory2/>
-                        <mandatory3/>
+                        <mandatory2>m2</mandatory2>
                     </mandatoryFields>
                     <optionalFields>
                         <optional1/>
-                        <optional2/>
-                        <optional3/>
+                        <optional2>o2</optional2>
                     </optionalFields>
                 </configuration>
                 <executions>

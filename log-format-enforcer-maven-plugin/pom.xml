@@ -14,10 +14,10 @@
     <properties>
         <!--plugins-->
         <maven-plugin-plugin.version>3.4</maven-plugin-plugin.version>
-        <!--dependencies-->
         <maven-plugin-api.version>3.0</maven-plugin-api.version>
-        <maven-core.version>3.0</maven-core.version>
         <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
+        <!--dependencies-->
+        <maven-core.version>3.0</maven-core.version>
         <log-format-enforcer-generator.version>1.5-SNAPSHOT</log-format-enforcer-generator.version>
     </properties>
 
@@ -85,7 +85,7 @@
                     <postBuildHookScript>verify</postBuildHookScript>
                     <goals>
                         <goal>clean</goal>
-                        <goal>compile</goal>
+                        <goal>test</goal>
                     </goals>
                 </configuration>
                 <executions>
