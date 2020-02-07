@@ -82,7 +82,6 @@
                     <pomIncludes>
                         <pomInclude>*/pom.xml</pomInclude>
                     </pomIncludes>
-                    <postBuildHookScript>verify</postBuildHookScript>
                     <goals>
                         <goal>clean</goal>
                         <goal>test</goal>
