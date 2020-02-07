@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.leandronunes85.lfe</groupId>
-    <artifactId>log-format-enforcer-maven-plugin-simple-it</artifactId>
+    <artifactId>log-format-enforcer-maven-plugin-java-it</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <description>A simple IT verifying the basic use case.</description>
+    <description>Integration Tests verifying the Java usage of the LogFormatEnforcer.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
