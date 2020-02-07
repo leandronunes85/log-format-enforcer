@@ -65,7 +65,7 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
 
     private Language languageEnum;
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         logParameters();
 
         this.languageEnum = Language.from(language);
