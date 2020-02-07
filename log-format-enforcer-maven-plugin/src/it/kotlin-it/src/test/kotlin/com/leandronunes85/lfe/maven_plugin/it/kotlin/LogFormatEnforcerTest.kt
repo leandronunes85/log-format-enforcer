@@ -16,7 +16,7 @@ class LogFormatEnforcerTest {
     fun `basic syntax test`() {
         victim.info {
             mandatory1("").mandatory2(10)
-                .optional1(emptyArray<Any>()).optional2("")
+                .optional1(emptyArray<Any>()).optional2 { "lazy value" }
                 .and("other", "").exception(RuntimeException())
         }
     }
@@ -26,6 +26,5 @@ class LogFormatEnforcerTest {
         emptyArray<Int>()
                 .traceEach(victim) { number: Int -> mandatory1(number).mandatory2("number is a single element") }
                 .debug(victim) { wholeArray: Array<Int> -> mandatory1("").mandatory2("").and("wholeArray", wholeArray) }
-
     }
 }

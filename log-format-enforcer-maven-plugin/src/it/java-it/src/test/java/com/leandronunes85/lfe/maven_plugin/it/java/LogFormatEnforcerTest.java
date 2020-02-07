@@ -13,7 +13,7 @@ public class LogFormatEnforcerTest {
     @Test
     public void basicSyntaxTest() {
         victim.info(messageBuilder -> messageBuilder.mandatory1("valueMandatory1").mandatory2(100)
-                .optional1(new ArrayList()).optional2("valueOptional2")
+                .optional1(new ArrayList()).optional2(() -> "lazy value")
                 .and("other", "otherValue").exception(new RuntimeException()));
     }
 }
