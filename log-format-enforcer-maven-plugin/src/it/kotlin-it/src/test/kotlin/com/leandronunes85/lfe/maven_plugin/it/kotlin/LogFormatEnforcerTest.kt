@@ -29,11 +29,10 @@ class LogFormatEnforcerTest {
                 .debug(victim) { wholeArray: Array<Int> -> mandatory1("").mandatory2("").and("wholeArray", wholeArray) }
     }
 
-    @Test(timeout = 5)
+    @Test
     fun `log values are not computed if the log is not performed`() {
         fun costlyOperation(): String {
-            Thread.sleep(10)
-            return "some value"
+            throw RuntimeException("This method should not have been called!")
         }
 
         victim.trace {

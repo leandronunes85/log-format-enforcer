@@ -18,13 +18,9 @@ public class LogFormatEnforcerTest {
     }
 
     private String costlyOperation() {
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {}
-        return "some value";
+        throw new RuntimeException("This method should not have been called!");
     }
 
-    @Test(timeout = 5)
     public void logValuesAreNotComputedIfTheLogIsNotPerformed() {
         victim.trace(messageBuilder -> messageBuilder
                 .mandatory1("valueMandatory1").mandatory2(costlyOperation())
