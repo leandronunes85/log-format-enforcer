@@ -72,16 +72,6 @@ public class LogFormatEnforcerStaticContentTest extends AbstractTest {
     }
 
     @Test
-    public void mandatoryField1InterfaceContainsSetterForSupplierOfMandatoryField1() {
-        ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MandatoryField1");
-        List<String> methods = getAllMethodsByName(classOrInterface, "mandatoryField1").stream()
-                .map(m -> m.getDeclarationAsString(true, true, false))
-                .collect(toList());
-
-        assertThat(methods).containsOnlyOnce("MoreFields mandatoryField1(Supplier<Object>)");
-    }
-
-    @Test
     public void moreFieldsInterfaceContainsSetterForSupplierOfExtraFields() {
         ClassOrInterfaceDeclaration classOrInterface = getClassOrInterfaceByName("MoreFields");
         List<String> methods = getAllMethodsByName(classOrInterface, "and").stream()
