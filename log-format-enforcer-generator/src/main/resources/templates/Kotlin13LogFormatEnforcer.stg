@@ -298,9 +298,6 @@ object LogFormatEnforcerExtensions {
 interface(expandedFieldInfo) ::= <<
 interface <expandedFieldInfo.interfaceName><if(expandedFieldInfo.optional)> : <expandedFieldInfo.returnType><endif> {
     fun <expandedFieldInfo.fieldName>(value: Any?): <expandedFieldInfo.returnType>
-
-    fun <expandedFieldInfo.fieldName>(valueSupplier: () -\> Any?): <expandedFieldInfo.returnType> =
-        <expandedFieldInfo.fieldName>(valueSupplier())
 }
 >>
 
