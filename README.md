@@ -66,7 +66,7 @@ In the pom.xml:
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
@@ -98,7 +98,7 @@ This can be achieved by simply adding an optional configuration parameter `langu
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <configuration>
         <packageName>com.leandronunes85.tests.kotlin</packageName>
         <language>kotlin-1.3</language>
@@ -172,7 +172,7 @@ separate keys and values (because you fancy lambdas)? Just update your pom, like
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
         <mandatoryFields>
