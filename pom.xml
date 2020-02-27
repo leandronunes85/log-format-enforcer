@@ -4,7 +4,7 @@
 
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer</artifactId>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -24,7 +24,7 @@
         <url>https://github.com/leandronunes85/log-format-enforcer</url>
         <connection>scm:git:https://github.com/leandronunes85/log-format-enforcer.git</connection>
         <developerConnection>scm:git:https://github.com/leandronunes85/log-format-enforcer.git</developerConnection>
-        <tag>log-format-enforcer-1.5</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
