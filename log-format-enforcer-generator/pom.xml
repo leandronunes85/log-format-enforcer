@@ -14,7 +14,7 @@
         <!--dependencies-->
         <stringtemplate.version>4.0.2</stringtemplate.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <guava.version>19.0</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <!--test dependencies-->
         <junit.version>4.13</junit.version>
         <assertj-core.version>3.15.0</assertj-core.version>

@@ -13,11 +13,11 @@
 
     <properties>
         <!--plugins-->
-        <maven-plugin-plugin.version>3.4</maven-plugin-plugin.version>
-        <maven-plugin-api.version>3.0</maven-plugin-api.version>
-        <maven-plugin-annotations.version>3.4</maven-plugin-annotations.version>
+        <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
+        <maven-plugin-api.version>3.6.3</maven-plugin-api.version>
+        <maven-plugin-annotations.version>3.6.0</maven-plugin-annotations.version>
         <!--dependencies-->
-        <maven-core.version>3.0</maven-core.version>
+        <maven-core.version>3.6.3</maven-core.version>
         <log-format-enforcer-generator.version>1.6-SNAPSHOT</log-format-enforcer-generator.version>
     </properties>
 
