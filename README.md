@@ -101,7 +101,7 @@ This can be achieved by simply adding an optional configuration parameter `langu
     <version>1.5</version>
     <configuration>
         <packageName>com.leandronunes85.tests.kotlin</packageName>
-        <language>kotlin-1.3</language>
+        <language>kotlin-1.5</language>
         <mandatoryFields>
             <op />
             <msg />
@@ -204,16 +204,16 @@ Rebuild it, release it and that's it!
 >already have that. 
 
 ## Configuration properties
-| Name                 | Type                                     | Mandatory                      |
-|----------------------|------------------------------------------|--------------------------------|
-| packageName          | String.                                  | True.                          |
-| language             | String. Either `java-8` or `kotlin-1.3`. | False. Defaults to `java-8`.   |
-| mandatoryFields      | List of fields.                          | False. Defaults to empty list. |
-| optionalFields       | List of fields.                          | False. Defaults to empty list. |
-| entrySeparator       | String.                                  | False. Defaults to `, `.       |
-| valueDelimiterPrefix | String.                                  | False. Defaults to `'`.        |
-| valueDelimiterSuffix | String.                                  | False. Defaults to `'`.        |
-| keyValueSeparator    | String.                                  | False. Defaults to `=`.        |
+| Name                 | Type                                            | Mandatory                      |
+|----------------------|-------------------------------------------------|--------------------------------|
+| packageName          | String.                                         | True.                          |
+| language             | String. `java-8`, `kotlin-1.3` or `kotlin-1.5`. | False. Defaults to `java-8`.   |
+| mandatoryFields      | List of fields.                                 | False. Defaults to empty list. |
+| optionalFields       | List of fields.                                 | False. Defaults to empty list. |
+| entrySeparator       | String.                                         | False. Defaults to `, `.       |
+| valueDelimiterPrefix | String.                                         | False. Defaults to `'`.        |
+| valueDelimiterSuffix | String.                                         | False. Defaults to `'`.        |
+| keyValueSeparator    | String.                                         | False. Defaults to `=`.        |
 
 ### Field
 

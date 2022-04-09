@@ -11,64 +11,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.joining;
 
 public class LogFormatEnforcer {
 
-    public static LogFormatEnforcer loggerFor(Class\<?\> clazz) {
+    public static LogFormatEnforcer loggerFor(Class\<?> clazz) {
         return new LogFormatEnforcer(clazz.getName());
     }
 
-    private final HashMap\<Level, BooleanSupplier\> logEnabledLookup = new HashMap\<\>(Level.values().length);
-    private final HashMap\<Level, BiConsumer\<String, Object[]\>\> logLookup = new HashMap\<\>(Level.values().length);
+    private final Logger logger;
 
     private LogFormatEnforcer(String logName) {
-        Logger logger = LoggerFactory.getLogger(logName);
-
-        this.logEnabledLookup.put(Level.ERROR, logger::isErrorEnabled);
-        this.logEnabledLookup.put(Level.WARN, logger::isWarnEnabled);
-        this.logEnabledLookup.put(Level.INFO, logger::isInfoEnabled);
-        this.logEnabledLookup.put(Level.DEBUG, logger::isDebugEnabled);
-        this.logEnabledLookup.put(Level.TRACE, logger::isTraceEnabled);
-
-        this.logLookup.put(Level.ERROR, logger::error);
-        this.logLookup.put(Level.WARN, logger::warn);
-        this.logLookup.put(Level.INFO, logger::info);
-        this.logLookup.put(Level.DEBUG, logger::debug);
-        this.logLookup.put(Level.TRACE, logger::trace);
+        this.logger = LoggerFactory.getLogger(logName);
     }
 
     public void error(MessageBuilder messageBuilder) {
-        log(Level.ERROR, messageBuilder);
+        log(messageBuilder, logger::isErrorEnabled, logger::error);
     }
 
     public void warn(MessageBuilder messageBuilder) {
-        log(Level.WARN, messageBuilder);
+        log(messageBuilder, logger::isWarnEnabled, logger::warn);
     }
 
     public void info(MessageBuilder messageBuilder) {
-        log(Level.INFO, messageBuilder);
+        log(messageBuilder, logger::isInfoEnabled, logger::info);
     }
 
     public void debug(MessageBuilder messageBuilder) {
-        log(Level.DEBUG, messageBuilder);
+        log(messageBuilder, logger::isDebugEnabled, logger::debug);
     }
 
     public void trace(MessageBuilder messageBuilder) {
-        log(Level.TRACE, messageBuilder);
+        log(messageBuilder, logger::isTraceEnabled, logger::trace);
     }
 
-    private void log(Level level, MessageBuilder messageBuilder) {
-        if (this.logEnabledLookup.get(level).getAsBoolean()) {
+    private void log(MessageBuilder messageBuilder, Supplier\<Boolean> logEnabled, BiConsumer\<String, Object[]> logAction) {
+        if (logEnabled.get()) {
             ActualBuilder builder = new ActualBuilder();
             messageBuilder.build(builder);
-            this.logLookup.get(level).accept(builder.getMessage(), builder.getArguments());
+            logAction.accept(builder.getMessage(), builder.getArguments());
         }
     }
 
@@ -81,7 +69,7 @@ public class LogFormatEnforcer {
     public interface MoreFields extends NoMoreFields {
         MoreFields and(String name, Object value);
 
-        default MoreFields and(String name, Supplier\<Object\> valueSupplier) {
+        default MoreFields and(String name, Supplier\<Object> valueSupplier) {
             return and(name, valueSupplier.get());
         }
 
@@ -93,8 +81,8 @@ public class LogFormatEnforcer {
 
     private static class ActualBuilder implements <expandedFieldInfos:{o | <o.interfaceName>}; separator=", "><if(expandedFieldInfos)>, <endif>MoreFields, NoMoreFields {
 
-        private final ArrayList\<String\> messages = new ArrayList\<\>();
-        private final ArrayList\<Object\> values = new ArrayList\<\>();
+        private final LinkedList\<String> messages = new LinkedList\<>();
+        private final LinkedList\<Object> values = new LinkedList\<>();
 
         <expandedFieldInfos:actualBuilderMethod();separator="\n\n">
 

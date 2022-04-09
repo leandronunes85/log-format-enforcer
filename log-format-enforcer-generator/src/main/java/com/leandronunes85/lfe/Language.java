@@ -7,7 +7,8 @@ import java.nio.file.Paths;
 
 public enum Language {
     JAVA8("templates/Java8LogFormatEnforcer.stg", ".java", "java"),
-    KOTLIN13("templates/Kotlin13LogFormatEnforcer.stg", ".kt", "kotlin");
+    KOTLIN13("templates/Kotlin13LogFormatEnforcer.stg", ".kt", "kotlin"),
+    KOTLIN15("templates/Kotlin15LogFormatEnforcer.stg", ".kt", "kotlin");
 
     public static Language from(String language) {
         switch (language) {
@@ -15,8 +16,10 @@ public enum Language {
                 return JAVA8;
             case "kotlin-1.3":
                 return KOTLIN13;
+            case "kotlin-1.5":
+                return KOTLIN15;
             default:
-                throw new IllegalArgumentException("Language '" + language + "' not supported. It must be either 'java-8' or 'kotlin-1.3'");
+                throw new IllegalArgumentException("Language '" + language + "' not supported. It must be one of 'java-8' 'kotlin-1.3' or 'kotlin-1.5'");
         }
     }
 

@@ -16,13 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AbstractTest {
 
-    private static <T> Stream<T> filter(Collection<?> collection, Class<T> clazz) {
-        return collection.stream()
-                .filter(clazz::isInstance)
-                .map(clazz::cast);
-    }
-
-    private LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
+    private final LogFormatEnforcerCreator victim = new LogFormatEnforcerCreator();
 
     protected CompilationUnit compilationUnit;
 
@@ -50,7 +44,7 @@ public class AbstractTest {
 
     protected ClassOrInterfaceDeclaration getClassOrInterfaceByName(String classOrInterfaceName) {
         List<ClassOrInterfaceDeclaration> matchingInterfaces =
-                filter(compilationUnit.getTypes().get(0).getMembers(), ClassOrInterfaceDeclaration.class)
+                filterInstancesOfClass(compilationUnit.getTypes().get(0).getMembers(), ClassOrInterfaceDeclaration.class)
                         .filter(i -> classOrInterfaceName.equals(i.getName()))
                         .collect(Collectors.toList());
 
@@ -77,8 +71,14 @@ public class AbstractTest {
 
     protected List<MethodDeclaration> getAllMethodsByName(TypeDeclaration classOrInterface,
                                                           String methodName) {
-        return filter(classOrInterface.getMembers(), MethodDeclaration.class)
+        return filterInstancesOfClass(classOrInterface.getMembers(), MethodDeclaration.class)
                 .filter(i -> methodName.equals(i.getName()))
                 .collect(Collectors.toList());
+    }
+
+    private static <T> Stream<T> filterInstancesOfClass(Collection<?> collection, Class<T> clazz) {
+        return collection.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast);
     }
 }

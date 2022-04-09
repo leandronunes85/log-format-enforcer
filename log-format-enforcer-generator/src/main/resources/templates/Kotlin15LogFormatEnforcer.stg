@@ -7,9 +7,9 @@ logFormatEnforcer(package,
                     builderEntryPoint) ::= <<
 package <package>
 
-import java.util.LinkedList
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.slf4j.event.Level
+import java.util.LinkedList
 
 class LogFormatEnforcer private constructor(logName: String) {
 
@@ -18,53 +18,36 @@ class LogFormatEnforcer private constructor(logName: String) {
         fun loggerFor(name: String): LogFormatEnforcer = LogFormatEnforcer(name)
     }
 
-    private val logEnabledLookup: Map\<Level, () -> Boolean>
-    private val logLookup: Map\<Level, (String, Array\<Any?>) -> Unit>
+    private val logger: Logger
 
     init {
-        val logger = LoggerFactory.getLogger(logName)
-
-        this.logEnabledLookup = mapOf(
-                Level.ERROR to logger::isErrorEnabled,
-                Level.WARN to logger::isWarnEnabled,
-                Level.INFO to logger::isInfoEnabled,
-                Level.DEBUG to logger::isDebugEnabled,
-                Level.TRACE to logger::isTraceEnabled
-        )
-
-        this.logLookup = mapOf(
-                Level.ERROR to { message, objects -> logger.error(message, *objects) },
-                Level.WARN to { message, objects -> logger.warn(message, *objects) },
-                Level.INFO to { message, objects -> logger.info(message, *objects) },
-                Level.DEBUG to { message, objects -> logger.debug(message, *objects) },
-                Level.TRACE to { message, objects -> logger.trace(message, *objects) }
-        )
+        logger = LoggerFactory.getLogger(logName)
     }
 
     fun error(messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        log(Level.ERROR, messageBuilder)
+        log(messageBuilder, logger::isErrorEnabled, logger::error)
     }
 
     fun warn(messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        log(Level.WARN, messageBuilder)
+        log(messageBuilder, logger::isWarnEnabled, logger::warn)
     }
 
     fun info(messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        log(Level.INFO, messageBuilder)
+        log(messageBuilder, logger::isInfoEnabled, logger::info)
     }
 
     fun debug(messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        log(Level.DEBUG, messageBuilder)
+        log(messageBuilder, logger::isDebugEnabled, logger::debug)
     }
 
     fun trace(messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        log(Level.TRACE, messageBuilder)
+        log(messageBuilder, logger::isTraceEnabled, logger::trace)
     }
 
-    private fun log(level: Level, messageBuilder: <builderEntryPoint>.() -> NoMoreFields) {
-        if (this.logEnabledLookup[level]?.invoke() == true) {
+    private fun log(messageBuilder: <builderEntryPoint>.() -> NoMoreFields, logEnabled: () -> Boolean, logAction: (String, Array\<Any?>) -> Unit) {
+        if (logEnabled()) {
             val builder = ActualBuilder().messageBuilder()
-            this.logLookup[level]?.invoke(builder.message(), builder.arguments())
+            logAction(builder.message(), builder.arguments())
         }
     }
 
