@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/leandronunes85/log-format-enforcer.svg?branch=master)](https://travis-ci.org/leandronunes85/log-format-enforcer)
-
 # Log Format Enforcer
 
 The goal of this maven plugin is to provide teams with a way of enforcing a certain logging message style in their projects. 
