@@ -42,7 +42,7 @@ public class LogFormatEnforcerMojo extends AbstractMojo {
     @Parameter
     private LinkedHashMap<String, String> optionalFields = new LinkedHashMap<>();
 
-    @Parameter(defaultValue = "java-8")
+    @Parameter(defaultValue = "java-11")
     private String language;
 
     @Parameter(required = true)

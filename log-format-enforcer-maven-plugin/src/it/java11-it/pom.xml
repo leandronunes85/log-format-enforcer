@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.leandronunes85.lfe</groupId>
-    <artifactId>log-format-enforcer-maven-plugin-java8-it</artifactId>
+    <artifactId>log-format-enforcer-maven-plugin-java11-it</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <description>Integration Tests verifying the Java 8 usage of the LogFormatEnforcer.</description>
+    <description>Integration Tests verifying the Java 11 usage of the LogFormatEnforcer.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,7 +50,7 @@
                 <version>@project.version@</version>
                 <configuration>
                     <packageName>com.leandronunes85.lfe.maven_plugin.it.java</packageName>
-                    <language>java-8</language>
+                    <language>java-11</language>
                     <mandatoryFields>
                         <mandatory1/>
                         <mandatory2>m2</mandatory2>
