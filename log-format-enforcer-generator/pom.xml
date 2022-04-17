@@ -14,12 +14,12 @@
     <properties>
         <!--dependencies-->
         <stringtemplate.version>4.0.2</stringtemplate.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
-        <guava.version>29.0-jre</guava.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <guava.version>31.1-jre</guava.version>
         <!--test dependencies-->
-        <junit.version>4.13</junit.version>
-        <assertj-core.version>3.15.0</assertj-core.version>
-        <javaparser-core.version>2.1.0</javaparser-core.version>
+        <junit.version>4.13.2</junit.version>
+        <assertj-core.version>3.22.0</assertj-core.version>
+        <javaparser-core.version>2.5.1</javaparser-core.version>
     </properties>
 
     <dependencies>
