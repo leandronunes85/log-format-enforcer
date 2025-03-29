@@ -6,27 +6,27 @@
     <parent>
         <groupId>com.leandronunes85.lfe</groupId>
         <artifactId>log-format-enforcer</artifactId>
-        <version>1.8-SNAPSHOT</version>
+        <version>1.7.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>log-format-enforcer-generator</artifactId>
 
     <properties>
         <!--dependencies-->
-        <stringtemplate.version>4.0.2</stringtemplate.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <guava.version>31.1-jre</guava.version>
+        <ST4.version>4.3.4</ST4.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <guava.version>33.4.6-jre</guava.version>
         <!--test dependencies-->
         <junit.version>4.13.2</junit.version>
-        <assertj-core.version>3.22.0</assertj-core.version>
+        <assertj-core.version>3.27.3</assertj-core.version>
         <javaparser-core.version>2.5.1</javaparser-core.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
-            <artifactId>stringtemplate</artifactId>
-            <version>${stringtemplate.version}</version>
+            <artifactId>ST4</artifactId>
+            <version>${ST4.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
