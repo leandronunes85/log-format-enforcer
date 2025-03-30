@@ -1,34 +1,28 @@
 package com.leandronunes85.lfe;
 
-import java.util.Map;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
-import static com.google.common.base.MoreObjects.firstNonNull;
+import java.io.Serializable;
 
-public class FieldInfo {
+public class FieldInfo implements Serializable {
 
     public static FieldInfo mandatory(String fieldName, String fieldText) {
         return new FieldInfo(fieldName, fieldText, false);
-    }
-
-    public static FieldInfo mandatory(Map.Entry<String, String> entry) {
-        return mandatory(entry.getKey(), firstNonNull(entry.getValue(), entry.getKey()));
     }
 
     public static FieldInfo optional(String fieldName, String fieldText) {
         return new FieldInfo(fieldName, fieldText, true);
     }
 
-    public static FieldInfo optional(Map.Entry<String, String> entry) {
-        return optional(entry.getKey(), firstNonNull(entry.getValue(), entry.getKey()));
-    }
-
     private final String fieldName;
     private final String fieldText;
     private final boolean optional;
 
-    protected FieldInfo(String fieldName, String fieldText, boolean optional) {
+    public FieldInfo(String fieldName, String fieldText, boolean optional) {
+        Preconditions.checkNotNull(fieldName, "Field requires a name");
         this.fieldName = fieldName;
-        this.fieldText = fieldText;
+        this.fieldText = MoreObjects.firstNonNull(fieldText, fieldName);
         this.optional = optional;
     }
 

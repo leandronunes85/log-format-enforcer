@@ -51,14 +51,25 @@
                 <configuration>
                     <packageName>com.leandronunes85.lfe.maven_plugin.it.java</packageName>
                     <language>java-11</language>
-                    <mandatoryFields>
-                        <mandatory1/>
-                        <mandatory2>m2</mandatory2>
-                    </mandatoryFields>
-                    <optionalFields>
-                        <optional1/>
-                        <optional2>o2</optional2>
-                    </optionalFields>
+                    <fields>
+                        <field>
+                            <name>mandatory1</name>
+                            <mandatory>true</mandatory>
+                        </field>
+                        <field>
+                            <name>mandatory2</name>
+                            <text>m2</text>
+                            <mandatory>true</mandatory>
+                        </field>
+                        <field>
+                            <name>optional1</name>
+                        </field>
+                        <field>
+                            <name>optional2</name>
+                            <text>o2</text>
+                            <mandatory>false</mandatory>
+                        </field>
+                    </fields>
                 </configuration>
                 <executions>
                     <execution>
