@@ -1,6 +1,6 @@
 # Log Format Enforcer
 
-The goal of this maven plugin is to provide teams with a way of enforcing a certain logging message style in their projects. 
+The goal of this plugin is to provide teams with a way of enforcing a certain logging message style in their projects. 
 
 ## Motivation
 I often find myself working in projects where certain log guidelines were agreed upon. In my opinion this is awesome 
