@@ -64,17 +64,27 @@ In the pom.xml:
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.7.2</version>
+    <version>2.0.0</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
-        <mandatoryFields>
-            <op />
-            <msg />
-        </mandatoryFields>
-        <optionalFields>
-            <input />
-            <output />
-        </optionalFields>
+        <fields>
+            <field>
+                <name>op</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>msg</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>input</name>
+                <mandatory>false</mandatory>
+            </field>
+            <field>
+                <name>output</name>
+                <mandatory>false</mandatory>
+            </field>
+        </fields>
     </configuration>
     <executions>
         <execution>
@@ -96,18 +106,28 @@ This can be achieved by simply adding an optional configuration parameter `langu
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
     <artifactId>log-format-enforcer-maven-plugin</artifactId>
-    <version>1.7.2</version>
+    <version>2.0.0</version>
     <configuration>
         <packageName>com.leandronunes85.tests.kotlin</packageName>
         <language>kotlin-1.5</language>
-        <mandatoryFields>
-            <op />
-            <msg />
-        </mandatoryFields>
-        <optionalFields>
-            <input />
-            <output />
-        </optionalFields>
+        <fields>
+            <field>
+                <name>op</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>msg</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>input</name>
+                <mandatory>false</mandatory>
+            </field>
+            <field>
+                <name>output</name>
+                <mandatory>false</mandatory>
+            </field>
+        </fields>
     </configuration>
     <executions>
         <execution>
@@ -173,14 +193,24 @@ separate keys and values (because you fancy lambdas)? Just update your pom, like
     <version>1.7.2</version>
     <configuration>
         <packageName>com.leandronunes85.tests</packageName>
-        <mandatoryFields>
-            <op />
-            <msg />
-        </mandatoryFields>
-        <optionalFields>
-            <input />
-            <output />
-        </optionalFields>
+        <fields>
+            <field>
+                <name>op</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>msg</name>
+                <mandatory>true</mandatory>
+            </field>
+            <field>
+                <name>input</name>
+                <mandatory>false</mandatory>
+            </field>
+            <field>
+                <name>output</name>
+                <mandatory>false</mandatory>
+            </field>
+        </fields>
         <valueDelimiterPrefix>[</valueDelimiterPrefix>
         <valueDelimiterSuffix>]</valueDelimiterSuffix>
         <keyValueSeparator>-></keyValueSeparator>
@@ -206,8 +236,7 @@ Rebuild it, release it and that's it!
 |----------------------|--------------------------------------------------|--------------------------------|
 | packageName          | String.                                          | True.                          |
 | language             | String. `java-11`, `kotlin-1.3` or `kotlin-1.5`. | False. Defaults to `java-11`.  |
-| mandatoryFields      | List of fields.                                  | False. Defaults to empty list. |
-| optionalFields       | List of fields.                                  | False. Defaults to empty list. |
+| fields               | List of fields.                                  | False. Defaults to empty list. |
 | entrySeparator       | String.                                          | False. Defaults to `, `.       |
 | valueDelimiterPrefix | String.                                          | False. Defaults to `'`.        |
 | valueDelimiterSuffix | String.                                          | False. Defaults to `'`.        |
@@ -215,10 +244,12 @@ Rebuild it, release it and that's it!
 
 ### Field
 
-Both `mandatoryFields` and `optionalFields` take a list of Fields. A Field, in its simplest form can be described as:  
+A Field, in its simplest form can be described as:  
 ```xml
 ...
-<fieldName />
+<field>
+    <name>fieldName</name>
+</field>
 ...
 ```
 This will generate a method called `fieldName` that will log a value with the label "fieldName". Sometimes,
@@ -226,17 +257,26 @@ however, one may want to have different values for the method name and the label
 This can be achieved by declaring such fields using this form instead: 
 ```xml
 ...
-<methodName>logLabel</methodName>
+<field>
+    <name>methodName</name>
+    <text>logLabel</text>
+</field>
 ...
 ```
 
 So, going back to our original example, one could have used: 
 ```xml
 ...
-<mandatoryFields>
-    <operation>op</operation>
-    <message>msg</message>
-</mandatoryFields>
+<field>
+    <name>operation</name>
+    <text>op</text>
+    <mandatory>true</mandatory>
+</field>
+<field>
+    <name>message</name>
+    <text>msg</text>
+    <mandatory>true</mandatory>
+</field>
 ...
 ```
 to have more meaningful code (`log.info { operation("someMethod").message("some message that ...`) while still complying with 
