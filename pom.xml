@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <name>Log Format Enforcer</name>
-    <description>Maven plugin for enforcing a certain log style across your project</description>
+    <description>Plugin for enforcing a certain log style across your project</description>
     <url>https://github.com/leandronunes85/log-format-enforcer</url>
 
     <licenses>
