@@ -21,7 +21,7 @@ gradlePlugin {
             displayName = "Log Format Enforcer"
             description =
                 "The goal of this plugin is to provide teams with a way of enforcing a certain logging message style in their projects."
-            tags = setOf("log", "format", "enforce", "observability", "operational", "support")
+            tags = setOf("log", "format", "enforce", "lfe", "observability", "operational", "support")
             implementationClass = "com.leandronunes85.lfe.plugin.gradle.LogFormatEnforcerPlugin"
         }
     }
