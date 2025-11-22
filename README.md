@@ -1,3 +1,5 @@
+[![Maven build](https://github.com/leandronunes85/log-format-enforcer/actions/workflows/maven_build.yml/badge.svg?branch=master)](https://github.com/leandronunes85/log-format-enforcer/actions/workflows/maven_build.yml)
+
 # Log Format Enforcer
 
 The goal of this plugin is to provide teams with a way of enforcing a certain logging message style in their projects. 
