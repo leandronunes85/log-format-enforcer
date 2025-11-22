@@ -9,7 +9,10 @@
         <version>2.0.1-SNAPSHOT</version>
     </parent>
 
+    <packaging>jar</packaging>
     <artifactId>log-format-enforcer-generator</artifactId>
+
+    <name>Log Format Enforcer source-code generator</name>
 
     <properties>
         <!--dependencies-->
