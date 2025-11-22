@@ -4,7 +4,7 @@ Maven is still a very common build system for JVM projects. This is the plugin y
 Log Format Enforcer in your maven project.
 
 ## Configuration
-In the "main" pom.xml
+In the "main" `pom.xml`:
 ```xml
 <plugin>
     <groupId>com.leandronunes85.lfe</groupId>
