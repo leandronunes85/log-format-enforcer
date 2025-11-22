@@ -4,13 +4,11 @@ import com.leandronunes85.lfe.FieldInfo;
 import com.leandronunes85.lfe.Language;
 import com.leandronunes85.lfe.LogFormatEnforcerCreator;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.Project;
 import org.gradle.api.file.Directory;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
-import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.BufferedWriter;
