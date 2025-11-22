@@ -121,7 +121,7 @@ Note the addition of methods `` `logLevel`Each(LogFormatEnforcer, `message build
 
 ## How to use it
 
-Most JVM these days use either Gradle or Maven build systems so we provide one plugin for each of the two:
+Most JVM projects these days use either Gradle or Maven build systems so we provide one plugin for each of the two:
  * [Maven Plugin](log-format-enforcer-maven-plugin/README.md)
  * Gradle (WIP)
 
