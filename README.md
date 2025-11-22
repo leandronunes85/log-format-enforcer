@@ -123,7 +123,7 @@ Note the addition of methods `` `logLevel`Each(LogFormatEnforcer, `message build
 
 Most JVM projects these days use either Gradle or Maven build systems so we provide one plugin for each of the two:
  * [Maven Plugin](log-format-enforcer-maven-plugin/README.md)
- * [Gradle](log-format-enforcer-gradle-plugin/README.md)
+ * [Gradle Plugin](log-format-enforcer-gradle-plugin/README.md)
 
 ## Wrap up
 Your comments, suggestions, concerns, etc, are all welcome so please drop me a line!
