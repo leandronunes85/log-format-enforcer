@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.leandronunes85.lfe</groupId>
-    <artifactId>log-format-enforcer-maven-plugin-kotlin1.5-it</artifactId>
+    <artifactId>log-format-enforcer-maven-plugin-kotlin-it</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <description>Integration Tests verifying the Kotlin 1.5 usage of the LogFormatEnforcer.</description>
+    <description>Integration Tests verifying the Kotlin usage of the LogFormatEnforcer.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.5.32</kotlin.version>
+        <kotlin.version>2.4.21</kotlin.version>
     </properties>
 
     <dependencies>
@@ -51,12 +51,16 @@
                     <execution>
                         <id>compile</id>
                         <phase>process-sources</phase>
-                        <goals> <goal>compile</goal> </goals>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
                     </execution>
 
                     <execution>
                         <id>test-compile</id>
-                        <goals> <goal>test-compile</goal> </goals>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -66,7 +70,7 @@
                 <version>@project.version@</version>
                 <configuration>
                     <packageName>com.leandronunes85.lfe.maven_plugin.it.kotlin</packageName>
-                    <language>kotlin-1.5</language>
+                    <language>kotlin</language>
                     <fields>
                         <field>
                             <name>mandatory1</name>
